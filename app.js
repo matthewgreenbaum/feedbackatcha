@@ -1,4 +1,4 @@
-// ===== FeedbackAtcha App =====
+// ===== FeedbackAtcha App v2 =====
 
 const SYSTEM_PROMPT = `You are FeedbackAtcha, a specialized AI partner that helps B2B SaaS marketers craft high-quality, professional creative feedback. You are not a writing tutor. You are not a design critic. You are a partner.
 
@@ -39,7 +39,9 @@ RULES:
 - Flag spec issues inline (dimensions, character counts, safe zones, file sizes, etc.)
 - Protect relationships — always collaborative in tone
 - Use markdown headers (###) to organize sections
-- Keep feedback concise but substantive`;
+- Keep feedback concise but substantive
+- If the user is chatting conversationally (asking questions, describing a situation), respond naturally as a knowledgeable marketing partner — don't force a feedback framework
+- If the user pastes copy or describes an asset for review, use the appropriate framework based on the mode`;
 
 // ===== State =====
 const state = {
@@ -52,7 +54,6 @@ const state = {
   uploadedFile: null,
   uploadedFileBase64: null,
   uploadedFileType: null,
-  pastedCopy: '',
   feedbackResult: '',
   conversationHistory: [],
   brandSettings: {
@@ -74,8 +75,31 @@ document.addEventListener('DOMContentLoaded', () => {
   initModeSlider();
   initUpload();
   initSettings();
+  initContextDrawer();
   initCTA();
+  initMainInput();
 });
+
+// ===== Main Input (supports Enter to submit) =====
+function initMainInput() {
+  const input = document.getElementById('main-input');
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      generateFeedback();
+    }
+  });
+}
+
+// ===== Context Drawer =====
+function initContextDrawer() {
+  const toggle = document.getElementById('context-toggle');
+  const content = document.getElementById('context-content');
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('open');
+    content.classList.toggle('open');
+  });
+}
 
 // ===== Asset Type Tiles =====
 function initTiles() {
@@ -101,7 +125,6 @@ function initSegmented() {
 
 // ===== Pills =====
 function initPills() {
-  // Audience - multi-select
   document.querySelectorAll('.audience-pills .pill').forEach(pill => {
     pill.addEventListener('click', () => {
       pill.classList.toggle('selected');
@@ -114,7 +137,6 @@ function initPills() {
     });
   });
 
-  // Goal - single select
   document.querySelectorAll('.goal-pills .pill').forEach(pill => {
     pill.addEventListener('click', () => {
       document.querySelectorAll('.goal-pills .pill').forEach(p => p.classList.remove('selected'));
@@ -130,7 +152,6 @@ function initModeSlider() {
   const thumb = document.querySelector('.mode-slider-thumb');
 
   function updateThumb(selected) {
-    const idx = Array.from(options).indexOf(selected);
     const width = selected.offsetWidth;
     const left = selected.offsetLeft;
     thumb.style.width = width + 'px';
@@ -146,7 +167,6 @@ function initModeSlider() {
     });
   });
 
-  // Init position
   setTimeout(() => {
     const selected = document.querySelector('.mode-option.selected');
     if (selected) updateThumb(selected);
@@ -160,23 +180,21 @@ function initModeSlider() {
 
 // ===== File Upload =====
 function initUpload() {
-  const area = document.getElementById('upload-area');
   const input = document.getElementById('file-input');
   const preview = document.getElementById('upload-preview');
-  const pasteInput = document.getElementById('paste-copy');
+  const area = document.getElementById('upload-area');
 
   input.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
     state.uploadedFile = file;
-    area.classList.add('has-file');
 
     if (file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onload = (ev) => {
         state.uploadedFileBase64 = ev.target.result.split(',')[1];
         state.uploadedFileType = file.type;
-        preview.innerHTML = `<div>${file.name}</div><img src="${ev.target.result}" alt="Preview">`;
+        showUploadPreview(file.name);
       };
       reader.readAsDataURL(file);
     } else if (file.type === 'application/pdf') {
@@ -184,23 +202,34 @@ function initUpload() {
       const reader = new FileReader();
       reader.onload = (ev) => {
         state.uploadedFileBase64 = ev.target.result.split(',')[1];
-        preview.innerHTML = `<div>📄 ${file.name}</div>`;
+        showUploadPreview(file.name);
       };
       reader.readAsDataURL(file);
     } else {
       const reader = new FileReader();
       reader.onload = (ev) => {
-        state.pastedCopy = ev.target.result;
+        // Append file text to main input
+        const mainInput = document.getElementById('main-input');
+        if (!mainInput.value) mainInput.value = ev.target.result;
         state.uploadedFileBase64 = null;
-        preview.innerHTML = `<div>📝 ${file.name}</div>`;
+        showUploadPreview(file.name);
       };
       reader.readAsText(file);
     }
   });
+}
 
-  pasteInput.addEventListener('input', (e) => {
-    state.pastedCopy = e.target.value;
-  });
+function showUploadPreview(name) {
+  const preview = document.getElementById('upload-preview');
+  preview.innerHTML = `${name} <button class="remove-upload" onclick="removeUpload()">&times;</button>`;
+}
+
+function removeUpload() {
+  state.uploadedFile = null;
+  state.uploadedFileBase64 = null;
+  state.uploadedFileType = null;
+  document.getElementById('upload-preview').innerHTML = '';
+  document.getElementById('file-input').value = '';
 }
 
 // ===== Settings =====
@@ -217,7 +246,6 @@ function initSettings() {
   overlay.addEventListener('click', close);
   closeBtn.addEventListener('click', close);
 
-  // Brand toggle
   const toggle = document.getElementById('brand-toggle');
   toggle.addEventListener('click', () => {
     toggle.classList.toggle('on');
@@ -225,13 +253,11 @@ function initSettings() {
   });
   if (state.brandSettings.enabled) toggle.classList.add('on');
 
-  // Brand inputs
   document.getElementById('brand-name').addEventListener('input', e => { state.brandSettings.name = e.target.value; });
   document.getElementById('brand-voice').addEventListener('input', e => { state.brandSettings.voiceNotes = e.target.value; });
   document.getElementById('brand-url').addEventListener('input', e => { state.brandSettings.websiteUrl = e.target.value; });
   document.getElementById('brand-guidelines').addEventListener('input', e => { state.brandSettings.guidelines = e.target.value; });
 
-  // Color management
   document.getElementById('add-color-btn').addEventListener('click', () => {
     const input = document.getElementById('brand-color-input');
     let hex = input.value.trim();
@@ -272,7 +298,6 @@ function loadBrandSettings() {
     try {
       const parsed = JSON.parse(saved);
       Object.assign(state.brandSettings, parsed);
-      // Populate fields after DOM ready
       setTimeout(() => {
         document.getElementById('brand-name').value = state.brandSettings.name || '';
         document.getElementById('brand-voice').value = state.brandSettings.voiceNotes || '';
@@ -290,20 +315,28 @@ function loadBrandSettings() {
 // ===== CTA & API =====
 function initCTA() {
   document.getElementById('cta-btn').addEventListener('click', generateFeedback);
+  document.getElementById('notes-input').addEventListener('input', (e) => {
+    state.notes = e.target.value;
+  });
 }
 
 async function generateFeedback() {
-  // Validate
-  if (!state.assetType) return showError('Please select an asset type.');
-  if (!state.creativeStage) return showError('Please select a creative stage.');
-  if (!state.audience.length) return showError('Please select at least one audience.');
-  if (!state.goal) return showError('Please select a goal.');
-  if (!state.uploadedFileBase64 && !state.pastedCopy) return showError('Please upload an asset or paste copy to review.');
+  const mainInput = document.getElementById('main-input').value.trim();
+
+  if (!mainInput && !state.uploadedFileBase64) {
+    return showError('Give me something to work with — paste copy, upload a file, or tell me what you need.');
+  }
 
   clearError();
   setLoading(true);
 
-  const modeLabel = { 'full-read': 'Full Read', 'quick-take': 'Quick Take', 'just-draft': 'Just Draft It' }[state.mode];
+  // Build context string from optional selections
+  let contextParts = [];
+  if (state.assetType) contextParts.push(`Asset Type: ${state.assetType}`);
+  if (state.creativeStage) contextParts.push(`Creative Stage: ${state.creativeStage}`);
+  if (state.audience.length) contextParts.push(`Feedback Audience: ${state.audience.join(', ')}`);
+  if (state.goal) contextParts.push(`Goal: ${state.goal}`);
+  if (state.notes) contextParts.push(`Additional Context: ${state.notes}`);
 
   let brandContext = '';
   if (state.brandSettings.enabled && hasBrandData()) {
@@ -318,31 +351,28 @@ async function generateFeedback() {
 
   let modeInstruction = '';
   if (state.mode === 'full-read') {
-    modeInstruction = `MODE: Full Read
-First, provide a Pre-Draft Read: a brief situation read (what you're seeing and the context), recommend one of the feedback frameworks, and a tone tip for delivery. Keep this to 3-5 sentences max under a "### Reading the Room" header.
-Then provide the full feedback draft under a "### Feedback Draft" header.`;
+    modeInstruction = `\n\nMODE: Full Read
+First, provide a Pre-Draft Read: a brief situation read, recommend a feedback framework, and a tone tip. 3-5 sentences max under "### Reading the Room".
+Then the full feedback draft under "### Feedback Draft".`;
   } else if (state.mode === 'quick-take') {
-    modeInstruction = `MODE: Quick Take
-Start with one sharp sentence as your read on the situation (under "### Quick Take"), then go straight into the feedback draft under "### Feedback Draft".`;
+    modeInstruction = `\n\nMODE: Quick Take
+One sharp sentence as your read (under "### Quick Take"), then straight into "### Feedback Draft".`;
   } else {
-    modeInstruction = `MODE: Just Draft It
-Skip any pre-draft read. Silently select the best framework and output only the feedback draft under "### Feedback Draft".`;
+    modeInstruction = `\n\nMODE: Just Draft It
+Skip pre-draft. Select best framework silently. Output only "### Feedback Draft".`;
   }
 
-  const userMessage = `Please review the following asset and generate professional creative feedback.
+  let userMessage = mainInput;
 
-CONTEXT:
-- Asset Type: ${state.assetType}
-- Creative Stage: ${state.creativeStage}
-- Feedback Audience: ${state.audience.join(', ')}
-- Goal: ${state.goal}
-${state.notes ? `- Additional Context: ${state.notes}` : ''}
+  if (contextParts.length) {
+    userMessage += `\n\nCONTEXT:\n- ${contextParts.join('\n- ')}`;
+  }
 
-${modeInstruction}${brandContext}
+  userMessage += modeInstruction + brandContext;
 
-After the feedback draft, end with a "### What's Next?" section offering these options: Tighten it, Expand it, Shift the tone, Reformat for Figma, Reformat for Google Doc, Reformat for Slack.
-
-${state.pastedCopy ? `COPY/CONTENT TO REVIEW:\n${state.pastedCopy}` : 'See the attached image/file for the asset to review.'}`;
+  if (contextParts.length || state.uploadedFileBase64) {
+    userMessage += `\n\nAfter the feedback draft, end with "### What's Next?" offering: Tighten it, Expand it, Shift the tone, Reformat for Figma, Reformat for Google Doc, Reformat for Slack.`;
+  }
 
   // Build content array
   const content = [];
@@ -372,14 +402,16 @@ ${state.pastedCopy ? `COPY/CONTENT TO REVIEW:\n${state.pastedCopy}` : 'See the a
 }
 
 async function streamResponse(messages) {
+  const outputCard = document.getElementById('output-card');
   const outputEl = document.getElementById('output-content');
-  const placeholder = document.getElementById('output-placeholder');
   const actionPills = document.getElementById('action-pills');
 
-  placeholder.style.display = 'none';
+  outputCard.classList.add('visible');
   outputEl.innerHTML = '';
-  outputEl.classList.remove('visible');
-  actionPills.style.display = 'none';
+  actionPills.classList.remove('visible');
+
+  // Scroll to output
+  outputCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -408,8 +440,6 @@ async function streamResponse(messages) {
   let fullText = '';
   let buffer = '';
 
-  outputEl.classList.add('visible');
-
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
@@ -436,10 +466,8 @@ async function streamResponse(messages) {
   state.feedbackResult = fullText;
   state.conversationHistory.push({ role: 'assistant', content: fullText });
 
-  // Show action pills
-  actionPills.style.display = 'flex';
+  actionPills.classList.add('visible');
   setLoading(false);
-  setOrbState('complete');
 }
 
 // ===== Post-Draft Actions =====
@@ -447,12 +475,12 @@ function postAction(action) {
   if (!state.feedbackResult) return;
 
   const prompts = {
-    'tighten': 'Please tighten this feedback — make it more concise and punchy while keeping all key points. Remove any redundancy.',
-    'expand': 'Please expand this feedback — add more detail, examples, and specific recommendations where useful.',
-    'shift-tone': 'Please shift the tone of this feedback — make it slightly more formal and diplomatic while keeping it real and actionable.',
-    'figma': 'Please reformat this feedback for pasting into Figma comments. Use short, direct annotations that work as sticky-note style comments on a design. Group by section/area of the design.',
-    'gdoc': 'Please reformat this feedback as a clean Google Doc — use proper headings, bullet points, and a professional document structure.',
-    'slack': 'Please reformat this feedback for Slack. Use a conversational tone, emoji where appropriate, and break it into short readable blocks. Make it feel like a thoughtful Slack message, not a formal document.'
+    'tighten': 'Please tighten this feedback — more concise and punchy, keep all key points.',
+    'expand': 'Please expand this feedback — more detail, examples, and specific recommendations.',
+    'shift-tone': 'Please shift the tone — slightly more formal and diplomatic while staying real and actionable.',
+    'figma': 'Reformat for Figma comments. Short, direct annotations. Group by section/area.',
+    'gdoc': 'Reformat as a clean Google Doc — proper headings, bullets, professional structure.',
+    'slack': 'Reformat for Slack. Conversational, emoji where appropriate, short readable blocks.'
   };
 
   state.conversationHistory.push({
@@ -467,7 +495,7 @@ function postAction(action) {
   });
 }
 
-// ===== Markdown Renderer (lightweight) =====
+// ===== Markdown Renderer =====
 function renderMarkdown(text) {
   return text
     .replace(/### (.+)/g, '<h3>$1</h3>')
@@ -489,47 +517,37 @@ function renderMarkdown(text) {
 // ===== UI Helpers =====
 function setLoading(loading) {
   const btn = document.getElementById('cta-btn');
+  const label = document.getElementById('cta-label');
   if (loading) {
     btn.disabled = true;
-    btn.textContent = 'Reading the room...';
-    setOrbState('thinking');
+    label.textContent = 'Reading the room...';
   } else {
     btn.disabled = false;
-    btn.textContent = 'Get Feedback';
+    label.textContent = 'Get Feedback';
   }
-}
-
-function setOrbState(s) {
-  const orb = document.getElementById('orb');
-  orb.classList.remove('thinking', 'complete');
-  if (s) orb.classList.add(s);
 }
 
 function showError(msg) {
-  let el = document.getElementById('error-msg');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'error-msg';
-    el.className = 'error-msg';
-    document.querySelector('.input-panel').appendChild(el);
-  }
+  clearError();
+  const el = document.createElement('div');
+  el.id = 'error-msg';
+  el.className = 'error-msg';
   el.textContent = msg;
-  el.style.display = 'block';
+  document.querySelector('.input-card').appendChild(el);
 }
 
 function clearError() {
   const el = document.getElementById('error-msg');
-  if (el) el.style.display = 'none';
+  if (el) el.remove();
 }
 
 function copyOutput() {
   const text = state.feedbackResult;
   if (!text) return;
   navigator.clipboard.writeText(text).then(() => {
-    const btn = document.querySelector('.copy-btn');
-    const orig = btn.textContent;
+    const btn = document.querySelector('.copy-btn span');
     btn.textContent = 'Copied!';
-    setTimeout(() => btn.textContent = orig, 2000);
+    setTimeout(() => btn.textContent = 'Copy', 2000);
   });
 }
 

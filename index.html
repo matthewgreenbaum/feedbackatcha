@@ -11,7 +11,10 @@
 
 <!-- Header -->
 <header class="header">
-  <h1>FeedbackAtcha</h1>
+  <div class="header-brand">
+    <div class="orb-logo"></div>
+    <h1>FeedbackAtcha</h1>
+  </div>
   <div class="header-actions">
     <button class="btn-icon" id="settings-btn" title="Brand Settings">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -21,102 +24,121 @@
   </div>
 </header>
 
-<!-- Main Layout -->
-<main class="main-layout">
+<!-- Hero -->
+<section class="hero">
+  <h2>Creative feedback that actually helps.</h2>
+  <p>Paste your copy, upload a file, or just describe what you need. Your AI marketing partner handles the rest.</p>
+</section>
 
-  <!-- Input Panel -->
-  <div class="input-panel">
-
-    <div class="section-label">Asset Type</div>
-    <div class="tile-grid">
-      <div class="tile" data-value="LinkedIn Ad"><div class="tile-icon">💼</div>LinkedIn Ad</div>
-      <div class="tile" data-value="Meta Ad"><div class="tile-icon">📱</div>Meta Ad</div>
-      <div class="tile" data-value="Google Ad"><div class="tile-icon">🔍</div>Google Ad</div>
-      <div class="tile" data-value="Display Ad"><div class="tile-icon">🖥️</div>Display Ad</div>
-      <div class="tile" data-value="Email"><div class="tile-icon">✉️</div>Email</div>
-      <div class="tile" data-value="Landing Page"><div class="tile-icon">📄</div>Landing Page</div>
-      <div class="tile" data-value="Website Page"><div class="tile-icon">🌐</div>Website Page</div>
-      <div class="tile" data-value="eBook / Whitepaper"><div class="tile-icon">📘</div>eBook / Whitepaper</div>
-      <div class="tile" data-value="Case Study"><div class="tile-icon">📊</div>Case Study</div>
-      <div class="tile" data-value="Sales Deck"><div class="tile-icon">📈</div>Sales Deck</div>
-      <div class="tile" data-value="One-Pager"><div class="tile-icon">📋</div>One-Pager</div>
-      <div class="tile" data-value="Video Ad"><div class="tile-icon">🎬</div>Video Ad</div>
-      <div class="tile" data-value="Social Post"><div class="tile-icon">💬</div>Social Post</div>
-      <div class="tile" data-value="Webinar Asset"><div class="tile-icon">🎙️</div>Webinar Asset</div>
-      <div class="tile" data-value="Infographic"><div class="tile-icon">📉</div>Infographic</div>
-      <div class="tile" data-value="Chatbot Flow"><div class="tile-icon">🤖</div>Chatbot Flow</div>
+<!-- Main Input Card -->
+<div class="input-card">
+  <div class="input-card-inner">
+    <div class="main-input-area">
+      <div class="main-input-label">Paste copy, describe your asset, or ask a question</div>
+      <textarea class="main-textarea" id="main-input" placeholder="Paste your ad copy, email draft, landing page text... or just tell me what you're working on and I'll help."></textarea>
     </div>
 
-    <div class="section-label">Creative Stage</div>
-    <div class="segmented">
-      <button data-value="First Draft">First Draft</button>
-      <button data-value="In Review">In Review</button>
-      <button data-value="Near Final">Near Final</button>
-      <button data-value="Approval Ready">Approval Ready</button>
+    <div class="upload-strip">
+      <div class="upload-strip-btn" id="upload-area">
+        <input type="file" id="file-input" accept="image/*,.pdf,.txt,.doc,.docx">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+        Upload file
+      </div>
+      <div id="upload-preview" class="upload-preview-inline"></div>
     </div>
 
-    <div class="section-label">Who's the feedback for?</div>
-    <div class="pills audience-pills">
-      <button class="pill" data-value="Designer">Designer</button>
-      <button class="pill" data-value="Copywriter">Copywriter</button>
-      <button class="pill" data-value="Marketing Manager">Marketing Manager</button>
-      <button class="pill" data-value="VP / Director">VP / Director</button>
-      <button class="pill" data-value="Agency Partner">Agency Partner</button>
-      <button class="pill" data-value="Cross-Functional">Cross-Functional</button>
+    <div class="input-toolbar">
+      <div class="mode-slider-wrap">
+        <div class="mode-slider-track">
+          <div class="mode-slider-thumb"></div>
+          <button class="mode-option selected" data-value="full-read">Full Read</button>
+          <button class="mode-option" data-value="quick-take">Quick Take</button>
+          <button class="mode-option" data-value="just-draft">Just Draft It</button>
+        </div>
+      </div>
+      <button class="cta-btn" id="cta-btn">
+        <span class="orb-btn"></span>
+        <span id="cta-label">Get Feedback</span>
+      </button>
     </div>
+  </div>
+</div>
 
-    <div class="section-label">Goal of the asset</div>
-    <div class="pills goal-pills">
-      <button class="pill" data-value="Drive Clicks / Conversions">Drive Clicks / Conversions</button>
-      <button class="pill" data-value="Build Brand Awareness">Build Brand Awareness</button>
-      <button class="pill" data-value="Educate / Inform">Educate / Inform</button>
-      <button class="pill" data-value="Generate Leads">Generate Leads</button>
-      <button class="pill" data-value="Enable Sales">Enable Sales</button>
-      <button class="pill" data-value="Event Promotion">Event Promotion</button>
-    </div>
+<!-- Context Drawer -->
+<div class="context-drawer">
+  <button class="context-toggle" id="context-toggle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    Add context for better feedback
+  </button>
+  <div class="context-content" id="context-content">
+    <div class="context-grid">
+      <div class="context-section">
+        <div class="context-section-label">Asset Type</div>
+        <div class="tile-grid">
+          <div class="tile" data-value="LinkedIn Ad"><span class="tile-icon">💼</span> LinkedIn</div>
+          <div class="tile" data-value="Meta Ad"><span class="tile-icon">📱</span> Meta</div>
+          <div class="tile" data-value="Google Ad"><span class="tile-icon">🔍</span> Google</div>
+          <div class="tile" data-value="Display Ad"><span class="tile-icon">🖥</span> Display</div>
+          <div class="tile" data-value="Email"><span class="tile-icon">✉️</span> Email</div>
+          <div class="tile" data-value="Landing Page"><span class="tile-icon">📄</span> Landing</div>
+          <div class="tile" data-value="Website Page"><span class="tile-icon">🌐</span> Website</div>
+          <div class="tile" data-value="eBook / Whitepaper"><span class="tile-icon">📘</span> eBook</div>
+          <div class="tile" data-value="Case Study"><span class="tile-icon">📊</span> Case Study</div>
+          <div class="tile" data-value="Sales Deck"><span class="tile-icon">📈</span> Deck</div>
+          <div class="tile" data-value="One-Pager"><span class="tile-icon">📋</span> One-Pager</div>
+          <div class="tile" data-value="Video Ad"><span class="tile-icon">🎬</span> Video</div>
+          <div class="tile" data-value="Social Post"><span class="tile-icon">💬</span> Social</div>
+          <div class="tile" data-value="Webinar Asset"><span class="tile-icon">🎙</span> Webinar</div>
+          <div class="tile" data-value="Infographic"><span class="tile-icon">📉</span> Infographic</div>
+          <div class="tile" data-value="Chatbot Flow"><span class="tile-icon">🤖</span> Chatbot</div>
+        </div>
+      </div>
 
-    <div class="section-label">Anything else I should know?</div>
-    <textarea class="text-input" id="notes-input" placeholder="Campaign context, constraints, past feedback, internal politics... whatever helps me give you better feedback."></textarea>
+      <div class="context-section">
+        <div class="context-section-label">Creative Stage</div>
+        <div class="segmented">
+          <button data-value="First Draft">First Draft</button>
+          <button data-value="In Review">In Review</button>
+          <button data-value="Near Final">Near Final</button>
+          <button data-value="Approval Ready">Final</button>
+        </div>
 
-    <div class="section-label">Upload the asset</div>
-    <div class="upload-area" id="upload-area">
-      <input type="file" id="file-input" accept="image/*,.pdf,.txt,.doc,.docx">
-      <div>📎 Drop an image or PDF here, or click to browse</div>
-      <div id="upload-preview" class="upload-preview"></div>
-    </div>
+        <div class="context-section-label" style="margin-top:20px;">Who's the feedback for?</div>
+        <div class="pills audience-pills">
+          <button class="pill" data-value="Designer">Designer</button>
+          <button class="pill" data-value="Copywriter">Copywriter</button>
+          <button class="pill" data-value="Marketing Manager">Marketing Manager</button>
+          <button class="pill" data-value="VP / Director">VP / Director</button>
+          <button class="pill" data-value="Agency Partner">Agency Partner</button>
+          <button class="pill" data-value="Cross-Functional">Cross-Functional</button>
+        </div>
 
-    <div class="section-label">Or paste the copy</div>
-    <textarea class="text-input" id="paste-copy" placeholder="Paste headline, body copy, email text, ad copy — whatever you want reviewed."></textarea>
+        <div class="context-section-label" style="margin-top:20px;">Goal of the asset</div>
+        <div class="pills goal-pills">
+          <button class="pill" data-value="Drive Clicks / Conversions">Clicks / Conversions</button>
+          <button class="pill" data-value="Build Brand Awareness">Brand Awareness</button>
+          <button class="pill" data-value="Educate / Inform">Educate / Inform</button>
+          <button class="pill" data-value="Generate Leads">Lead Gen</button>
+          <button class="pill" data-value="Enable Sales">Sales Enablement</button>
+          <button class="pill" data-value="Event Promotion">Event Promo</button>
+        </div>
 
-    <div class="section-label">Feedback Mode</div>
-    <div class="mode-slider-wrap">
-      <div class="mode-slider-track">
-        <div class="mode-slider-thumb"></div>
-        <button class="mode-option selected" data-value="full-read">Full Read</button>
-        <button class="mode-option" data-value="quick-take">Quick Take</button>
-        <button class="mode-option" data-value="just-draft">Just Draft It</button>
+        <div class="context-section-label" style="margin-top:20px;">Anything else?</div>
+        <textarea class="text-input" id="notes-input" placeholder="Campaign context, constraints, past feedback..."></textarea>
       </div>
     </div>
-
-    <button class="cta-btn" id="cta-btn">Get Feedback</button>
-
   </div>
+</div>
 
-  <!-- Orb -->
-  <div class="orb-container">
-    <div class="orb" id="orb"></div>
-  </div>
-
-  <!-- Output Panel -->
-  <div class="output-panel">
-    <button class="copy-btn" onclick="copyOutput()">Copy</button>
-    <div id="output-placeholder" class="output-placeholder">
-      <div style="font-size:1.4rem;">✦</div>
-      <div>Your feedback will appear here</div>
-      <div style="font-size:0.78rem;">Fill out the inputs and hit Get Feedback</div>
-    </div>
+<!-- Output Section -->
+<div class="output-section">
+  <div class="output-card" id="output-card">
+    <button class="copy-btn" onclick="copyOutput()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      <span>Copy</span>
+    </button>
     <div id="output-content" class="output-content"></div>
-    <div id="action-pills" class="action-pills" style="display:none;">
+    <div id="action-pills" class="action-pills">
       <button class="action-pill" onclick="postAction('tighten')">Tighten it</button>
       <button class="action-pill" onclick="postAction('expand')">Expand it</button>
       <button class="action-pill" onclick="postAction('shift-tone')">Shift the tone</button>
@@ -125,8 +147,7 @@
       <button class="action-pill" onclick="postAction('slack')">Reformat for Slack</button>
     </div>
   </div>
-
-</main>
+</div>
 
 <!-- Settings Overlay -->
 <div class="settings-overlay" id="settings-overlay"></div>
@@ -146,7 +167,7 @@
   <div class="settings-card">
     <label>Brand Colors</label>
     <div style="display:flex;gap:8px;">
-      <input type="text" id="brand-color-input" placeholder="#2D6A8F" style="flex:1;">
+      <input type="text" id="brand-color-input" placeholder="#6B3FA0" style="flex:1;">
       <button class="action-pill" id="add-color-btn" style="white-space:nowrap;">Add</button>
     </div>
     <div id="color-swatches" class="color-swatches"></div>
@@ -176,12 +197,6 @@
   </div>
 </div>
 
-<script>
-  // Wire up notes input
-  document.getElementById('notes-input').addEventListener('input', (e) => {
-    state.notes = e.target.value;
-  });
-</script>
 <script src="app.js"></script>
 </body>
 </html>
