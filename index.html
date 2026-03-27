@@ -121,10 +121,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .context-notes{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-xs);font-family:inherit;font-size:0.82rem;resize:vertical;min-height:56px;color:var(--text-primary);background:var(--surface);line-height:1.5}
 .context-notes:focus{outline:none;border-color:var(--accent)}
 .context-notes::placeholder{color:var(--text-tertiary)}
-.context-done-wrap{border-top:1px solid var(--border-light)}
-.context-done-btn{display:flex;align-items:center;justify-content:center;width:100%;padding:12px;border:none;background:var(--surface);color:var(--accent);font-size:0.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:var(--transition);gap:6px}
-.context-done-btn:hover{background:var(--accent-light)}
-.context-done-btn svg{width:14px;height:14px}
+.context-panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.context-panel-title{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-primary)}
+.context-close-btn{background:none;border:none;cursor:pointer;color:var(--text-tertiary);padding:4px;border-radius:4px;transition:var(--transition);display:flex;align-items:center}
+.context-close-btn:hover{color:var(--accent);background:var(--accent-light)}
+.context-close-btn svg{width:18px;height:18px}
 
 /* Toolbar */
 .compose-toolbar{display:flex;align-items:flex-start;justify-content:space-between;padding:18px 20px 18px;border-top:1px solid var(--border-light);gap:12px}
@@ -224,6 +225,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <!-- Context Panel -->
       <div class="context-panel" id="context-panel">
 
+        <div class="context-panel-header">
+          <span class="context-panel-title">Details</span>
+          <button class="context-close-btn" id="context-close-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
         <!-- Asset Type Section -->
         <div class="context-section">
           <div class="context-section-title">
@@ -312,11 +320,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             <textarea class="context-notes" id="notes-input" placeholder="Campaign context, constraints, past feedback..."></textarea>
           </div>
         </div>
-      </div>
-
-      <!-- Collapse button — outside the scrollable panel -->
-      <div class="context-done-wrap" id="context-done-wrap" style="display:none">
-        <button class="context-done-btn" id="context-done-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>Collapse details</button>
       </div>
 
       <!-- Bottom toolbar -->
@@ -462,7 +465,7 @@ document.addEventListener('DOMContentLoaded',()=>{loadBrandSettings();initTiles(
 
 function autoResizeTextarea(){const ta=document.getElementById('main-input');ta.addEventListener('input',()=>{ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,300)+'px'});ta.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();submitMessage()}})}
 
-function initContextBar(){const panel=document.getElementById('context-panel');const wrap=document.getElementById('context-done-wrap');document.getElementById('context-bar-toggle').addEventListener('click',()=>{panel.classList.toggle('open');wrap.style.display=panel.classList.contains('open')?'block':'none'});document.getElementById('context-done-btn').addEventListener('click',()=>{panel.classList.remove('open');wrap.style.display='none'})}
+function initContextBar(){const panel=document.getElementById('context-panel');document.getElementById('context-bar-toggle').addEventListener('click',()=>{panel.classList.toggle('open')});document.getElementById('context-close-btn').addEventListener('click',()=>{panel.classList.remove('open')})}
 
 function updateContextTags(){const container=document.getElementById('context-tags');const tags=[];if(state.assetType)tags.push({label:state.assetType,clear:()=>{state.assetType=null;document.querySelectorAll('.tile').forEach(t=>t.classList.remove('selected'))}});if(state.creativeStage)tags.push({label:state.creativeStage,clear:()=>{state.creativeStage=null;document.querySelectorAll('.segmented button').forEach(b=>b.classList.remove('selected'))}});state.audience.forEach(a=>tags.push({label:a,clear:()=>{state.audience=state.audience.filter(x=>x!==a);document.querySelectorAll('.audience-pills .pill').forEach(p=>{if(p.dataset.value===a)p.classList.remove('selected')})}}));if(state.goal)tags.push({label:state.goal,clear:()=>{state.goal=null;document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'))}});container.innerHTML=tags.map((t,i)=>`<span class="context-tag">${t.label}<button class="remove-tag" data-idx="${i}">&times;</button></span>`).join('');container.querySelectorAll('.remove-tag').forEach((btn,i)=>{btn.addEventListener('click',(e)=>{e.stopPropagation();tags[i].clear();updateContextTags()})});document.getElementById('context-summary').textContent=tags.length?`Details (${tags.length})`:'Add details'}
 
