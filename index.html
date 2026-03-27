@@ -328,7 +328,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           </div>
         </div>
         <button class="send-btn" id="cta-btn">
-          <span id="cta-label">Get Feedback</span>
+          <span id="cta-label">Generate Feedback</span>
         </button>
       </div>
     </div>
@@ -478,7 +478,7 @@ function renderMarkdown(text){return text.replace(/### (.+)/g,'<h3>$1</h3>').rep
 
 function escapeHtml(str){const div=document.createElement('div');div.textContent=str;return div.innerHTML}
 
-function setLoading(loading){const btn=document.getElementById('cta-btn');const label=document.getElementById('cta-label');const input=document.getElementById('main-input');if(loading){btn.disabled=true;label.textContent='Reading the room...';input.disabled=true}else{btn.disabled=false;label.textContent='Get Feedback';input.disabled=false;input.focus()}}
+function setLoading(loading){const btn=document.getElementById('cta-btn');const label=document.getElementById('cta-label');const input=document.getElementById('main-input');if(loading){btn.disabled=true;label.textContent='Reading the room...';input.disabled=true}else{btn.disabled=false;label.textContent='Generate Feedback';input.disabled=false;input.focus()}}
 
 function showError(msg){clearError();const el=document.createElement('div');el.id='error-msg';el.className='error-msg';el.textContent=msg;document.querySelector('.compose').prepend(el)}
 function clearError(){const el=document.getElementById('error-msg');if(el)el.remove()}
