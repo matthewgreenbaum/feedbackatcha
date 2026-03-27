@@ -120,6 +120,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .context-notes{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-xs);font-family:inherit;font-size:0.82rem;resize:vertical;min-height:56px;color:var(--text-primary);background:var(--surface);line-height:1.5}
 .context-notes:focus{outline:none;border-color:var(--accent)}
 .context-notes::placeholder{color:var(--text-tertiary)}
+.context-done-btn{display:block;margin:16px auto 0;padding:6px 24px;border-radius:50px;border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);font-size:0.78rem;font-weight:600;cursor:pointer;font-family:inherit;transition:var(--transition)}
+.context-done-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
 
 /* Toolbar */
 .compose-toolbar{display:flex;align-items:flex-start;justify-content:space-between;padding:18px 20px 18px;border-top:1px solid var(--border-light);gap:12px}
@@ -307,6 +309,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             <textarea class="context-notes" id="notes-input" placeholder="Campaign context, constraints, past feedback..."></textarea>
           </div>
         </div>
+        <button class="context-done-btn" id="context-done-btn">Done</button>
       </div>
 
       <!-- Bottom toolbar -->
@@ -436,7 +439,7 @@ document.addEventListener('DOMContentLoaded',()=>{loadBrandSettings();initTiles(
 
 function autoResizeTextarea(){const ta=document.getElementById('main-input');ta.addEventListener('input',()=>{ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,300)+'px'});ta.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();submitMessage()}})}
 
-function initContextBar(){document.getElementById('context-bar-toggle').addEventListener('click',()=>{document.getElementById('context-panel').classList.toggle('open')})}
+function initContextBar(){document.getElementById('context-bar-toggle').addEventListener('click',()=>{document.getElementById('context-panel').classList.toggle('open')});document.getElementById('context-done-btn').addEventListener('click',()=>{document.getElementById('context-panel').classList.remove('open')})}
 
 function updateContextTags(){const container=document.getElementById('context-tags');const tags=[];if(state.assetType)tags.push({label:state.assetType,clear:()=>{state.assetType=null;document.querySelectorAll('.tile').forEach(t=>t.classList.remove('selected'))}});if(state.creativeStage)tags.push({label:state.creativeStage,clear:()=>{state.creativeStage=null;document.querySelectorAll('.segmented button').forEach(b=>b.classList.remove('selected'))}});state.audience.forEach(a=>tags.push({label:a,clear:()=>{state.audience=state.audience.filter(x=>x!==a);document.querySelectorAll('.audience-pills .pill').forEach(p=>{if(p.dataset.value===a)p.classList.remove('selected')})}}));if(state.goal)tags.push({label:state.goal,clear:()=>{state.goal=null;document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'))}});container.innerHTML=tags.map((t,i)=>`<span class="context-tag">${t.label}<button class="remove-tag" data-idx="${i}">&times;</button></span>`).join('');container.querySelectorAll('.remove-tag').forEach((btn,i)=>{btn.addEventListener('click',(e)=>{e.stopPropagation();tags[i].clear();updateContextTags()})});document.getElementById('context-summary').textContent=tags.length?`Details (${tags.length})`:'Add details'}
 
