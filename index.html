@@ -175,6 +175,24 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .helper-text{font-size:0.72rem;color:var(--text-tertiary);margin-top:6px;line-height:1.4}
 .error-msg{background:#FEF2F2;color:#991B1B;padding:12px 28px;font-size:0.85rem;border-top:1px solid #FECACA}
 
+/* Footer */
+.footer{max-width:820px;margin:-40px auto 40px;padding:0 24px}
+.footer-link{background:none;border:none;cursor:pointer;font-family:inherit;font-size:0.75rem;color:var(--text-tertiary);font-weight:500;padding:0;transition:var(--transition)}
+.footer-link:hover{color:var(--accent)}
+
+/* About Modal */
+.about-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:300;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(4px)}
+.about-overlay.open{opacity:1;pointer-events:all}
+.about-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.95);width:560px;max-width:92vw;max-height:80vh;background:var(--surface);border-radius:20px;box-shadow:var(--shadow-xl);z-index:301;opacity:0;pointer-events:none;transition:all 0.3s cubic-bezier(0.16,1,0.3,1);overflow-y:auto}
+.about-modal.open{opacity:1;pointer-events:all;transform:translate(-50%,-50%) scale(1)}
+.about-header{display:flex;align-items:center;justify-content:space-between;padding:24px 28px 0;position:sticky;top:0;background:var(--surface);z-index:1;padding-bottom:16px}
+.about-header h2{font-family:'DM Serif Display',serif;font-size:1.4rem;font-weight:400}
+.about-body{padding:8px 28px 28px}
+.faq-item{padding:16px 0;border-bottom:1px solid var(--border-light)}
+.faq-item:last-child{border-bottom:none}
+.faq-item h3{font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px}
+.faq-item p{font-size:0.85rem;line-height:1.7;color:var(--text-secondary)}
+
 @media(max-width:768px){.header{padding:16px 20px}.hero{margin-top:32px}.hero h2{font-size:2rem}.card-wrap{margin-top:24px}.compose-toolbar{flex-wrap:wrap}.toolbar-left{flex-wrap:wrap}}
 @media(max-width:480px){.tile-row{gap:4px}.tile{padding:6px 8px;font-size:0.65rem}.hero h2{font-size:1.6rem}.compose-input{padding:20px 20px 8px;font-size:0.95rem}.context-bar{padding:0 20px 8px}.compose-toolbar{padding:12px 16px}.mode-slider-track .mode-option{padding:6px 6px;font-size:0.62rem}}
   </style>
@@ -342,6 +360,52 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
 </div>
 
+<!-- Footer -->
+<footer class="footer">
+  <button class="footer-link" id="about-link">About FeedbackAtcha</button>
+</footer>
+
+<!-- About Modal -->
+<div class="about-overlay" id="about-overlay"></div>
+<div class="about-modal" id="about-modal">
+  <div class="about-header">
+    <h2>About FeedbackAtcha</h2>
+    <button class="btn-icon" id="about-close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="about-body">
+    <div class="faq-item">
+      <h3>What is FeedbackAtcha?</h3>
+      <p>FeedbackAtcha is an AI-powered tool that helps B2B SaaS marketers craft professional, actionable creative feedback. Think of it as the experienced colleague who always knows exactly what to say in a creative review.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Who is this for?</h3>
+      <p>Marketing managers, directors, and VPs who review creative work regularly — ads, emails, landing pages, decks, videos, and more. Whether you're giving feedback to designers, copywriters, agencies, or cross-functional teams.</p>
+    </div>
+    <div class="faq-item">
+      <h3>How does it work?</h3>
+      <p>Paste your copy, upload a creative asset, or just share your raw impressions. Select the asset type and context, and FeedbackAtcha generates structured, professional feedback using proven frameworks like I Like / I Wish / What If, SBI, and COIN.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What are the three modes?</h3>
+      <p><strong>Full Read</strong> gives you a situation assessment plus a complete feedback draft. <strong>Quick Take</strong> is a sharp one-liner followed by the draft. <strong>Just Draft It</strong> skips the preamble and goes straight to polished feedback.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What about my brand guidelines?</h3>
+      <p>Open the Brand Profile panel to add your website URL, brand guidelines (paste text, upload a PDF, or link to a doc), voice and tone notes, and brand colors. When enabled, your brand context is woven into every piece of feedback.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Is my data private?</h3>
+      <p>FeedbackAtcha runs entirely in your browser. Your API key and brand settings are stored locally on your device. Nothing is sent to any server other than the Anthropic API to generate feedback.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Do I need an API key?</h3>
+      <p>Yes. FeedbackAtcha uses the Anthropic API (Claude) to generate feedback. You'll need to paste your API key into the code. Your key is never stored on any external server.</p>
+    </div>
+  </div>
+</div>
+
 <!-- Settings Overlay + Panel (RIGHT side) -->
 <div class="settings-overlay" id="settings-overlay"></div>
 <div class="settings-panel" id="settings-panel">
@@ -454,7 +518,7 @@ const state={assetType:null,creativeStage:null,audience:[],goal:null,notes:'',mo
 
 const MODE_EXPLAINERS={'full-read':'Situation read + framework + full draft','quick-take':'One sharp take + draft','just-draft':'Skip the preamble, just draft it'};
 
-document.addEventListener('DOMContentLoaded',()=>{loadBrandSettings();initTiles();initSegmented();initPills();initModeSlider();initUpload();initSettings();initContextBar();initCTA();autoResizeTextarea()});
+document.addEventListener('DOMContentLoaded',()=>{loadBrandSettings();initTiles();initSegmented();initPills();initModeSlider();initUpload();initSettings();initContextBar();initCTA();initAbout();autoResizeTextarea()});
 
 function autoResizeTextarea(){const ta=document.getElementById('main-input');ta.addEventListener('input',()=>{ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,300)+'px'});ta.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();submitMessage()}})}
 
@@ -485,6 +549,8 @@ function saveBrandSettings(){localStorage.setItem('feedbackatcha_brand',JSON.str
 function loadBrandSettings(){const saved=localStorage.getItem('feedbackatcha_brand');if(saved){try{const p=JSON.parse(saved);Object.assign(state.brandSettings,p);setTimeout(()=>{document.getElementById('brand-voice').value=state.brandSettings.voiceNotes||'';document.getElementById('brand-url').value=state.brandSettings.websiteUrl||'';document.getElementById('brand-guidelines').value=state.brandSettings.guidelines||'';document.getElementById('brand-guidelines-url').value=state.brandSettings.guidelinesUrl||'';if(state.brandSettings.guidelinesFileName){const short=state.brandSettings.guidelinesFileName.length>20?state.brandSettings.guidelinesFileName.slice(0,18)+'...':state.brandSettings.guidelinesFileName;document.getElementById('guidelines-upload-preview').innerHTML=`${short} <button class="remove-upload" onclick="removeGuidelinesFile()">&times;</button>`}if(state.brandSettings.enabled)document.getElementById('brand-toggle').classList.add('on');renderColorSwatches();document.getElementById('color-limit-msg').style.display=state.brandSettings.colors.length>=10?'block':'none'},50)}catch(e){}}}
 
 function initCTA(){document.getElementById('cta-btn').addEventListener('click',submitMessage)}
+
+function initAbout(){const overlay=document.getElementById('about-overlay');const modal=document.getElementById('about-modal');const open=()=>{overlay.classList.add('open');modal.classList.add('open')};const close=()=>{overlay.classList.remove('open');modal.classList.remove('open')};document.getElementById('about-link').addEventListener('click',open);document.getElementById('about-close').addEventListener('click',close);overlay.addEventListener('click',close)}
 
 async function submitMessage(){const input=document.getElementById('main-input');const text=input.value.trim();if(!text&&!state.uploadedFileBase64)return showError('Give me something to work with — paste copy, upload a file, or tell me what you need.');clearError();let contextParts=[];if(state.assetType)contextParts.push(`Asset Type: ${state.assetType}`);if(state.creativeStage)contextParts.push(`Creative Stage: ${state.creativeStage}`);if(state.audience.length)contextParts.push(`Feedback Audience: ${state.audience.join(', ')}`);if(state.goal)contextParts.push(`Goal: ${state.goal}`);if(state.notes)contextParts.push(`Additional Context: ${state.notes}`);let brandContext='';if(state.brandSettings.enabled&&hasBrandData()){const b=state.brandSettings;brandContext=`\n\nBRAND PROFILE (active — weave naturally, never announce checking):`;if(b.colors.length)brandContext+=`\nBrand Colors: ${b.colors.join(', ')}`;if(b.voiceNotes)brandContext+=`\nVoice/Tone: ${b.voiceNotes}`;if(b.websiteUrl)brandContext+=`\nWebsite: ${b.websiteUrl}`;if(b.guidelines)brandContext+=`\nGuidelines: ${b.guidelines}`;if(b.guidelinesUrl)brandContext+=`\nGuidelines Link: ${b.guidelinesUrl}`}let modeInstruction='';if(state.conversationHistory.length===0||contextParts.length){if(state.mode==='full-read'){modeInstruction=`\n\nMODE: Full Read — situation read + framework rec + tone tip (3-5 sentences) under "### Reading the Room", then full draft under "### Feedback Draft".`}else if(state.mode==='quick-take'){modeInstruction=`\n\nMODE: Quick Take — one sharp sentence under "### Quick Take", then "### Feedback Draft".`}else{modeInstruction=`\n\nMODE: Just Draft It — skip pre-draft, output only "### Feedback Draft".`}}let userMessage=text;if(contextParts.length)userMessage+=`\n\nCONTEXT:\n- ${contextParts.join('\n- ')}`;userMessage+=modeInstruction+brandContext;addUserMessage(text);input.value='';input.style.height='auto';document.querySelector('.hero').classList.add('collapsed');document.getElementById('context-panel').classList.remove('open');document.getElementById('context-bar-toggle').classList.remove('active');updateContextSummary();const content=[];if(state.brandSettings.enabled&&state.brandSettings.guidelinesFileBase64){const gt=state.brandSettings.guidelinesFileType;if(gt&&gt.startsWith('image/')){content.push({type:'image',source:{type:'base64',media_type:gt,data:state.brandSettings.guidelinesFileBase64}})}else if(gt==='application/pdf'){content.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:state.brandSettings.guidelinesFileBase64}})}}if(state.uploadedFileBase64){if(state.uploadedFileType&&state.uploadedFileType.startsWith('image/')){content.push({type:'image',source:{type:'base64',media_type:state.uploadedFileType,data:state.uploadedFileBase64}})}else if(state.uploadedFileType==='application/pdf'){content.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:state.uploadedFileBase64}})}removeUpload()}content.push({type:'text',text:userMessage});state.conversationHistory.push({role:'user',content});setLoading(true);try{await streamToThread(state.conversationHistory)}catch(err){showError('Something went wrong: '+err.message);setLoading(false)}}
 
