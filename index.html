@@ -121,8 +121,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .context-notes{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-xs);font-family:inherit;font-size:0.82rem;resize:vertical;min-height:56px;color:var(--text-primary);background:var(--surface);line-height:1.5}
 .context-notes:focus{outline:none;border-color:var(--accent)}
 .context-notes::placeholder{color:var(--text-tertiary)}
-.context-done-btn{display:flex;align-items:center;justify-content:center;width:100%;margin-top:16px;padding:10px;border-radius:var(--radius-xs);border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);font-size:0.78rem;font-weight:600;cursor:pointer;font-family:inherit;transition:var(--transition);gap:6px}
-.context-done-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.context-done-btn{display:flex;align-items:center;justify-content:center;width:100%;padding:10px;border-radius:0;border:none;border-top:1px solid var(--border-light);background:var(--surface-warm);color:var(--text-secondary);font-size:0.78rem;font-weight:600;cursor:pointer;font-family:inherit;transition:var(--transition);gap:6px;position:sticky;bottom:0;margin:16px -28px -24px;width:calc(100% + 56px)}
+.context-done-btn:hover{color:var(--accent);background:var(--accent-light)}
 .context-done-btn svg{width:14px;height:14px}
 
 /* Toolbar */
