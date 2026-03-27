@@ -28,7 +28,7 @@ html{scroll-behavior:smooth}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
 
 /* Header */
-.header{display:flex;align-items:center;justify-content:space-between;padding:20px 40px;max-width:1200px;margin:0 auto}
+.header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;max-width:820px;margin:0 auto}
 .header-brand{display:flex;align-items:center;gap:12px}
 .orb-logo{width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 30% 35%,var(--orb-1) 0%,transparent 50%),radial-gradient(circle at 65% 55%,var(--orb-2) 0%,transparent 50%),radial-gradient(circle at 50% 40%,var(--orb-3) 0%,transparent 55%),radial-gradient(circle at 45% 60%,var(--orb-4) 0%,transparent 50%),radial-gradient(circle at 50% 50%,var(--orb-5) 0%,var(--orb-6) 100%);animation:orbShift 6s ease-in-out infinite;box-shadow:0 0 20px rgba(120,50,160,0.25),0 0 40px rgba(200,100,50,0.1);flex-shrink:0}
 @keyframes orbShift{0%,100%{background:radial-gradient(circle at 30% 35%,rgba(200,100,50,0.7) 0%,transparent 50%),radial-gradient(circle at 65% 55%,rgba(180,60,90,0.6) 0%,transparent 50%),radial-gradient(circle at 50% 40%,rgba(120,50,160,0.7) 0%,transparent 55%),radial-gradient(circle at 45% 60%,rgba(200,150,50,0.4) 0%,transparent 50%),radial-gradient(circle at 50% 50%,rgba(80,30,120,0.95) 0%,rgba(50,20,80,1) 100%)}33%{background:radial-gradient(circle at 40% 30%,rgba(220,130,40,0.6) 0%,transparent 50%),radial-gradient(circle at 60% 65%,rgba(160,40,100,0.7) 0%,transparent 50%),radial-gradient(circle at 45% 45%,rgba(100,40,180,0.6) 0%,transparent 55%),radial-gradient(circle at 55% 50%,rgba(210,160,40,0.5) 0%,transparent 50%),radial-gradient(circle at 50% 50%,rgba(90,35,130,0.95) 0%,rgba(55,22,85,1) 100%)}66%{background:radial-gradient(circle at 35% 40%,rgba(190,80,60,0.65) 0%,transparent 50%),radial-gradient(circle at 70% 50%,rgba(140,50,120,0.65) 0%,transparent 50%),radial-gradient(circle at 48% 35%,rgba(130,60,150,0.75) 0%,transparent 55%),radial-gradient(circle at 40% 55%,rgba(190,140,60,0.45) 0%,transparent 50%),radial-gradient(circle at 50% 50%,rgba(70,25,110,0.95) 0%,rgba(45,18,75,1) 100%)}}
@@ -92,7 +92,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 /* Context Panel */
 .context-panel{max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.16,1,0.3,1),padding 0.3s ease,opacity 0.3s ease;opacity:0;padding:0 28px}
-.context-panel.open{max-height:700px;opacity:1;padding:20px 28px 24px;border-top:1px solid var(--border-light)}
+.context-panel.open{max-height:900px;opacity:1;padding:20px 28px 24px;border-top:1px solid var(--border-light);overflow-y:auto}
 .context-section{background:var(--surface-warm);border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:16px 18px;margin-bottom:14px}
 .context-section:last-child{margin-bottom:0}
 .context-section-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
@@ -130,12 +130,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .upload-preview{font-size:0.75rem;color:var(--accent);font-weight:500;display:flex;align-items:center;gap:4px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .upload-preview .remove-upload{background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:1rem;line-height:1;padding:0}
 .upload-preview .remove-upload:hover{color:var(--text-primary)}
-.toolbar-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
-.mode-slider-wrap{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:2px}
-.mode-slider-track{display:flex;background:var(--surface-warm);border-radius:50px;position:relative;padding:2px;border:1px solid var(--border-light)}
-.mode-slider-track .mode-option{flex:1;text-align:center;padding:6px 10px;font-size:0.68rem;font-weight:500;cursor:pointer;position:relative;z-index:2;color:var(--text-secondary);transition:color 0.3s;border:none;background:none;font-family:inherit;border-radius:50px;white-space:nowrap}
+.mode-slider-wrap{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.mode-slider-track{display:flex;background:var(--surface-warm);border-radius:8px;position:relative;padding:2px;border:1px solid var(--border-light);height:36px;align-items:center}
+.mode-slider-track .mode-option{flex:1;text-align:center;padding:0 10px;font-size:0.68rem;font-weight:500;cursor:pointer;position:relative;z-index:2;color:var(--text-secondary);transition:color 0.3s;border:none;background:none;font-family:inherit;border-radius:6px;white-space:nowrap;height:calc(100% - 4px);display:flex;align-items:center;justify-content:center}
 .mode-slider-track .mode-option.selected{color:white}
-.mode-slider-thumb{position:absolute;top:2px;height:calc(100% - 4px);background:var(--text-primary);border-radius:50px;transition:left 0.3s ease,width 0.3s ease;z-index:1}
+.mode-slider-thumb{position:absolute;top:2px;height:calc(100% - 4px);background:var(--text-primary);border-radius:6px;transition:left 0.3s ease,width 0.3s ease;z-index:1}
 .mode-explainer{font-size:0.62rem;color:var(--text-tertiary);text-align:right}
 
 /* CTA — glowing orb gradient */
@@ -171,7 +170,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .helper-text{font-size:0.72rem;color:var(--text-tertiary);margin-top:6px;line-height:1.4}
 .error-msg{background:#FEF2F2;color:#991B1B;padding:12px 28px;font-size:0.85rem;border-top:1px solid #FECACA}
 
-@media(max-width:768px){.header{padding:16px 20px}.hero{margin-top:32px}.hero h2{font-size:2rem}.card-wrap{margin-top:24px}.compose-toolbar{flex-wrap:wrap}.toolbar-left{flex-wrap:wrap}.toolbar-right{width:100%;justify-content:space-between}}
+@media(max-width:768px){.header{padding:16px 20px}.hero{margin-top:32px}.hero h2{font-size:2rem}.card-wrap{margin-top:24px}.compose-toolbar{flex-wrap:wrap}.toolbar-left{flex-wrap:wrap}}
 @media(max-width:480px){.tile-row{gap:4px}.tile{padding:6px 8px;font-size:0.65rem}.hero h2{font-size:1.6rem}.compose-input{padding:20px 20px 8px;font-size:0.95rem}.context-bar{padding:0 20px 8px}.compose-toolbar{padding:12px 16px}.mode-slider-track .mode-option{padding:6px 6px;font-size:0.62rem}}
   </style>
 </head>
@@ -206,13 +205,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
     <!-- Compose Area -->
     <div class="compose" id="compose">
-      <textarea class="compose-input" id="main-input" placeholder="Paste your ad copy, email draft, landing page text... or just tell me what you're working on." rows="4"></textarea>
+      <textarea class="compose-input" id="main-input" placeholder="Paste your copy, upload a creative, or just share your raw first impressions — we'll turn them into polished, professional feedback." rows="4"></textarea>
 
       <!-- Context Bar -->
       <div class="context-bar" id="context-bar">
         <button class="context-bar-toggle" id="context-bar-toggle">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/><path d="M5 8h14"/><path d="M5 16h14"/></svg>
-          <span id="context-summary">Add context</span>
+          <span id="context-summary">Add details</span>
         </button>
         <div id="context-tags" class="context-tags"></div>
       </div>
@@ -230,7 +229,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             <div class="asset-category-label">Ads</div>
             <div class="tile-row">
               <div class="tile" data-value="LinkedIn Ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</div>
-              <div class="tile" data-value="Meta Ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4-4-1.8-4-4z"/></svg>Meta</div>
+              <div class="tile" data-value="Facebook Ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>Facebook</div>
               <div class="tile" data-value="Google Ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Google</div>
               <div class="tile" data-value="Display Ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Display</div>
             </div>
@@ -244,14 +243,16 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
               <div class="tile" data-value="Webinar Asset"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>Webinar</div>
               <div class="tile" data-value="Case Study"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Case Study</div>
               <div class="tile" data-value="One-Pager"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>One-Pager</div>
+              <div class="tile" data-value="Video Ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>Video</div>
             </div>
           </div>
           <div class="asset-category">
-            <div class="asset-category-label">Web / Email</div>
+            <div class="asset-category-label">Channels</div>
             <div class="tile-row">
               <div class="tile" data-value="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Email</div>
               <div class="tile" data-value="Landing Page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>Landing Page</div>
               <div class="tile" data-value="Website Page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Website</div>
+              <div class="tile" data-value="Social Post"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Social Post</div>
             </div>
           </div>
           <div class="asset-category">
@@ -260,13 +261,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
               <div class="tile" data-value="Outreach Sequence"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Outreach</div>
               <div class="tile" data-value="Sales Deck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M10 20l2 2 2-2"/></svg>Sales Deck</div>
               <div class="tile" data-value="Sales One-Pager"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>One-Pager</div>
-            </div>
-          </div>
-          <div class="asset-category">
-            <div class="asset-category-label">Video / Motion</div>
-            <div class="tile-row">
-              <div class="tile" data-value="Video Ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>Video Ad</div>
-              <div class="tile" data-value="Social Post"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Social Post</div>
             </div>
           </div>
         </div>
@@ -323,8 +317,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
           </div>
           <div id="upload-preview" class="upload-preview"></div>
-        </div>
-        <div class="toolbar-right">
           <div class="mode-slider-wrap">
             <div class="mode-slider-track">
               <div class="mode-slider-thumb"></div>
@@ -334,10 +326,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
             </div>
             <div class="mode-explainer" id="mode-explainer">Situation read + framework + full draft</div>
           </div>
-          <button class="send-btn" id="cta-btn">
-            <span id="cta-label">Get Feedback</span>
-          </button>
         </div>
+        <button class="send-btn" id="cta-btn">
+          <span id="cta-label">Get Feedback</span>
+        </button>
       </div>
     </div>
 
@@ -446,7 +438,7 @@ function autoResizeTextarea(){const ta=document.getElementById('main-input');ta.
 
 function initContextBar(){document.getElementById('context-bar-toggle').addEventListener('click',()=>{document.getElementById('context-panel').classList.toggle('open')})}
 
-function updateContextTags(){const container=document.getElementById('context-tags');const tags=[];if(state.assetType)tags.push({label:state.assetType,clear:()=>{state.assetType=null;document.querySelectorAll('.tile').forEach(t=>t.classList.remove('selected'))}});if(state.creativeStage)tags.push({label:state.creativeStage,clear:()=>{state.creativeStage=null;document.querySelectorAll('.segmented button').forEach(b=>b.classList.remove('selected'))}});state.audience.forEach(a=>tags.push({label:a,clear:()=>{state.audience=state.audience.filter(x=>x!==a);document.querySelectorAll('.audience-pills .pill').forEach(p=>{if(p.dataset.value===a)p.classList.remove('selected')})}}));if(state.goal)tags.push({label:state.goal,clear:()=>{state.goal=null;document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'))}});container.innerHTML=tags.map((t,i)=>`<span class="context-tag">${t.label}<button class="remove-tag" data-idx="${i}">&times;</button></span>`).join('');container.querySelectorAll('.remove-tag').forEach((btn,i)=>{btn.addEventListener('click',(e)=>{e.stopPropagation();tags[i].clear();updateContextTags()})});document.getElementById('context-summary').textContent=tags.length?`Context (${tags.length})`:'Add context'}
+function updateContextTags(){const container=document.getElementById('context-tags');const tags=[];if(state.assetType)tags.push({label:state.assetType,clear:()=>{state.assetType=null;document.querySelectorAll('.tile').forEach(t=>t.classList.remove('selected'))}});if(state.creativeStage)tags.push({label:state.creativeStage,clear:()=>{state.creativeStage=null;document.querySelectorAll('.segmented button').forEach(b=>b.classList.remove('selected'))}});state.audience.forEach(a=>tags.push({label:a,clear:()=>{state.audience=state.audience.filter(x=>x!==a);document.querySelectorAll('.audience-pills .pill').forEach(p=>{if(p.dataset.value===a)p.classList.remove('selected')})}}));if(state.goal)tags.push({label:state.goal,clear:()=>{state.goal=null;document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'))}});container.innerHTML=tags.map((t,i)=>`<span class="context-tag">${t.label}<button class="remove-tag" data-idx="${i}">&times;</button></span>`).join('');container.querySelectorAll('.remove-tag').forEach((btn,i)=>{btn.addEventListener('click',(e)=>{e.stopPropagation();tags[i].clear();updateContextTags()})});document.getElementById('context-summary').textContent=tags.length?`Details (${tags.length})`:'Add details'}
 
 function initTiles(){document.querySelectorAll('.tile').forEach(tile=>{tile.addEventListener('click',()=>{document.querySelectorAll('.tile').forEach(t=>t.classList.remove('selected'));tile.classList.add('selected');state.assetType=tile.dataset.value;updateContextTags()})})}
 
