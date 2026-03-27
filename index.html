@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FeedbackAtcha</title>
-  <!-- v4.6 -->
+  <!-- v4.7 -->
   <script>
   // ============================================================
   // PASTE YOUR ANTHROPIC API KEY HERE:
@@ -172,6 +172,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .pill:hover{border-color:var(--accent);color:var(--accent)}
 .pill.selected{border-color:var(--accent);background:var(--accent-light);color:var(--accent);font-weight:600}
 .pill.auto-selected{border:1px dashed var(--accent);background:transparent;color:var(--accent);font-weight:500}
+.framework-explainer{font-size:0.62rem;color:var(--text-tertiary);padding-left:2px;margin-top:6px;min-height:0;transition:all 0.2s ease;line-height:1.4}
 .context-notes{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-xs);font-family:inherit;font-size:0.82rem;resize:vertical;min-height:56px;color:var(--text-primary);background:var(--surface);line-height:1.5}
 .context-notes:focus{outline:none;border-color:var(--accent)}
 .context-notes::placeholder{color:var(--text-tertiary)}
@@ -393,6 +394,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
               <button class="pill" data-value="SBI">SBI</button>
               <button class="pill" data-value="Plus/Delta">Plus / Delta</button>
             </div>
+            <div class="framework-explainer" id="framework-explainer"></div>
           </div>
           <div>
             <div class="asset-category-label">Anything else?</div>
@@ -629,11 +631,14 @@ function initTiles(){document.querySelectorAll('.tile').forEach(tile=>{tile.addE
 
 function initSegmented(){document.querySelectorAll('.segmented button').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.segmented button').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.creativeStage=btn.dataset.value;updateContextTags();if(!state.frameworkManual)autoSelectFramework()})})}
 
-function initPills(){document.querySelectorAll('.audience-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{pill.classList.toggle('selected');const val=pill.dataset.value;if(state.audience.includes(val)){state.audience=state.audience.filter(a=>a!==val)}else{state.audience.push(val)}updateContextTags();if(!state.frameworkManual)autoSelectFramework()})});document.querySelectorAll('.goal-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'));pill.classList.add('selected');state.goal=pill.dataset.value;updateContextTags()})});document.querySelectorAll('.framework-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{const wasSelected=pill.classList.contains('selected');document.querySelectorAll('.framework-pills .pill').forEach(p=>{p.classList.remove('selected');p.classList.remove('auto-selected')});if(wasSelected){state.framework=null;state.frameworkManual=false;autoSelectFramework()}else{pill.classList.add('selected');state.framework=pill.dataset.value;state.frameworkManual=true}})})}
+function initPills(){document.querySelectorAll('.audience-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{pill.classList.toggle('selected');const val=pill.dataset.value;if(state.audience.includes(val)){state.audience=state.audience.filter(a=>a!==val)}else{state.audience.push(val)}updateContextTags();if(!state.frameworkManual)autoSelectFramework()})});document.querySelectorAll('.goal-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'));pill.classList.add('selected');state.goal=pill.dataset.value;updateContextTags()})});document.querySelectorAll('.framework-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{const wasSelected=pill.classList.contains('selected');document.querySelectorAll('.framework-pills .pill').forEach(p=>{p.classList.remove('selected');p.classList.remove('auto-selected')});if(wasSelected){state.framework=null;state.frameworkManual=false;autoSelectFramework()}else{pill.classList.add('selected');state.framework=pill.dataset.value;state.frameworkManual=true;updateFrameworkExplainer(pill.dataset.value)}})})}
 
 const FRAMEWORK_MAP={audience:{'Designer':'COIN','Copywriter':'COIN','Agency Partner':'COIN','Marketing Manager':'I Like / I Wish / What If','VP / Director':'Plus/Delta','Cross-Functional':'SBI'},stage:{'First Draft':'I Like / I Wish / What If','Approval Ready':'Plus/Delta','Near Final':'Plus/Delta'}};
+const FRAMEWORK_EXPLAINERS={'COIN':'Context → Observation → Impact → Next steps. Best for actionable, direct feedback.','I Like / I Wish / What If':'Encouraging + exploratory. Great for early ideas and collaborative brainstorming.','SBI':'Situation → Behavior → Impact. Structured for formal reviews and cross-team communication.','Plus/Delta':'What\'s working + what to change. Fast, executive-friendly.'};
 
-function autoSelectFramework(){document.querySelectorAll('.framework-pills .pill').forEach(p=>{p.classList.remove('auto-selected');p.classList.remove('selected')});let fw=null;if(state.creativeStage&&FRAMEWORK_MAP.stage[state.creativeStage]){fw=FRAMEWORK_MAP.stage[state.creativeStage]}else if(state.audience.length){const priority=['VP / Director','Cross-Functional','Marketing Manager','Agency Partner','Copywriter','Designer'];for(const p of priority){if(state.audience.includes(p)&&FRAMEWORK_MAP.audience[p]){fw=FRAMEWORK_MAP.audience[p];break}}}state.framework=fw;if(fw){const pill=document.querySelector(`.framework-pills .pill[data-value="${fw}"]`);if(pill)pill.classList.add('auto-selected')}}
+function autoSelectFramework(){document.querySelectorAll('.framework-pills .pill').forEach(p=>{p.classList.remove('auto-selected');p.classList.remove('selected')});let fw=null;if(state.creativeStage&&FRAMEWORK_MAP.stage[state.creativeStage]){fw=FRAMEWORK_MAP.stage[state.creativeStage]}else if(state.audience.length){const priority=['VP / Director','Cross-Functional','Marketing Manager','Agency Partner','Copywriter','Designer'];for(const p of priority){if(state.audience.includes(p)&&FRAMEWORK_MAP.audience[p]){fw=FRAMEWORK_MAP.audience[p];break}}}state.framework=fw;if(fw){const pill=document.querySelector(`.framework-pills .pill[data-value="${fw}"]`);if(pill)pill.classList.add('auto-selected')}updateFrameworkExplainer(fw)}
+
+function updateFrameworkExplainer(fw){const el=document.getElementById('framework-explainer');el.textContent=fw&&FRAMEWORK_EXPLAINERS[fw]?FRAMEWORK_EXPLAINERS[fw]:''}
 
 function initModeSlider(){const options=document.querySelectorAll('.mode-option');const thumb=document.querySelector('.mode-slider-thumb');const explainer=document.getElementById('mode-explainer');function updateThumb(s){thumb.style.width=s.offsetWidth+'px';thumb.style.left=s.offsetLeft+'px'}options.forEach(opt=>{opt.addEventListener('click',()=>{options.forEach(o=>o.classList.remove('selected'));opt.classList.add('selected');state.mode=opt.dataset.value;updateThumb(opt);explainer.textContent=MODE_EXPLAINERS[opt.dataset.value]||''})});setTimeout(()=>{const s=document.querySelector('.mode-option.selected');if(s)updateThumb(s)},100);window.addEventListener('resize',()=>{const s=document.querySelector('.mode-option.selected');if(s)updateThumb(s)})}
 
