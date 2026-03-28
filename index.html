@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FeedbackAtcha</title>
-  <!-- v4.8 -->
+  <!-- v4.9 -->
   <script>
   // ============================================================
   // PASTE YOUR ANTHROPIC API KEY HERE:
@@ -167,6 +167,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .segmented button{flex:1;padding:7px 4px;font-size:0.72rem;border:none;background:transparent;cursor:pointer;color:var(--text-secondary);transition:var(--transition);font-family:inherit;font-weight:500;border-radius:8px}
 .segmented button:hover{color:var(--text-primary)}
 .segmented button.selected{background:var(--accent-light);color:var(--accent);box-shadow:var(--shadow-sm)}
+.segmented button.auto-selected{background:transparent;color:var(--accent);box-shadow:none;border:1px dashed rgba(107,63,160,0.4);margin:-1px}
 .pills{display:flex;flex-wrap:wrap;gap:5px}
 .pill{padding:5px 12px;border-radius:50px;border:1px solid var(--border);background:var(--surface);font-size:0.72rem;cursor:pointer;color:var(--text-secondary);transition:var(--transition);font-family:inherit}
 .pill:hover{border-color:var(--accent);color:var(--accent)}
@@ -349,6 +350,21 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           </div>
         </div>
 
+        <!-- Framework Section (own card) -->
+        <div class="context-section">
+          <div class="context-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Feedback Framework
+          </div>
+          <div class="segmented framework-segmented">
+            <button data-value="COIN">COIN</button>
+            <button data-value="I Like / I Wish / What If">I Like / I Wish</button>
+            <button data-value="SBI">SBI</button>
+            <button data-value="Plus/Delta">Plus / Delta</button>
+          </div>
+          <div class="framework-explainer" id="framework-explainer"></div>
+        </div>
+
         <!-- Details Section -->
         <div class="context-section">
           <div class="context-section-title">
@@ -385,16 +401,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
               <button class="pill" data-value="Enable Sales">Sales Enablement</button>
               <button class="pill" data-value="Event Promotion">Event Promo</button>
             </div>
-          </div>
-          <div style="margin-bottom:14px">
-            <div class="asset-category-label">Framework</div>
-            <div class="pills framework-pills">
-              <button class="pill" data-value="COIN">COIN</button>
-              <button class="pill" data-value="I Like / I Wish / What If">I Like / I Wish / What If</button>
-              <button class="pill" data-value="SBI">SBI</button>
-              <button class="pill" data-value="Plus/Delta">Plus / Delta</button>
-            </div>
-            <div class="framework-explainer" id="framework-explainer"></div>
           </div>
           <div>
             <div class="asset-category-label">Anything else?</div>
@@ -631,12 +637,11 @@ function initTiles(){document.querySelectorAll('.tile').forEach(tile=>{tile.addE
 
 function initSegmented(){document.querySelectorAll('.segmented button').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.segmented button').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.creativeStage=btn.dataset.value;updateContextTags();if(!state.frameworkManual)autoSelectFramework()})})}
 
-function initPills(){document.querySelectorAll('.audience-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{pill.classList.toggle('selected');const val=pill.dataset.value;if(state.audience.includes(val)){state.audience=state.audience.filter(a=>a!==val)}else{state.audience.push(val)}updateContextTags();if(!state.frameworkManual)autoSelectFramework()})});document.querySelectorAll('.goal-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'));pill.classList.add('selected');state.goal=pill.dataset.value;updateContextTags()})});document.querySelectorAll('.framework-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{const wasSelected=pill.classList.contains('selected');document.querySelectorAll('.framework-pills .pill').forEach(p=>{p.classList.remove('selected');p.classList.remove('auto-selected')});if(wasSelected){state.framework=null;state.frameworkManual=false;autoSelectFramework()}else{pill.classList.add('selected');state.framework=pill.dataset.value;state.frameworkManual=true;updateFrameworkExplainer(pill.dataset.value)}})})}
-
+function initPills(){document.querySelectorAll('.audience-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{pill.classList.toggle('selected');const val=pill.dataset.value;if(state.audience.includes(val)){state.audience=state.audience.filter(a=>a!==val)}else{state.audience.push(val)}updateContextTags();if(!state.frameworkManual)autoSelectFramework()})});document.querySelectorAll('.goal-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'));pill.classList.add('selected');state.goal=pill.dataset.value;updateContextTags()})});document.querySelectorAll('.framework-segmented button').forEach(btn=>{btn.addEventListener('click',()=>{const wasSelected=btn.classList.contains('selected');document.querySelectorAll('.framework-segmented button').forEach(b=>{b.classList.remove('selected');b.classList.remove('auto-selected')});if(wasSelected){state.framework=null;state.frameworkManual=false;autoSelectFramework()}else{btn.classList.add('selected');state.framework=btn.dataset.value;state.frameworkManual=true;updateFrameworkExplainer(btn.dataset.value)}})})}
 const FRAMEWORK_MAP={audience:{'Designer':'COIN','Copywriter':'COIN','Agency Partner':'COIN','Marketing Manager':'I Like / I Wish / What If','VP / Director':'Plus/Delta','Cross-Functional':'SBI'},stage:{'First Draft':'I Like / I Wish / What If','Approval Ready':'Plus/Delta','Near Final':'Plus/Delta'}};
 const FRAMEWORK_EXPLAINERS={'COIN':'Context → Observation → Impact → Next steps. Best for actionable, direct feedback.','I Like / I Wish / What If':'Encouraging + exploratory. Great for early ideas and collaborative brainstorming.','SBI':'Situation → Behavior → Impact. Structured for formal reviews and cross-team communication.','Plus/Delta':'What\'s working + what to change. Fast, executive-friendly.'};
 
-function autoSelectFramework(){document.querySelectorAll('.framework-pills .pill').forEach(p=>{p.classList.remove('auto-selected');p.classList.remove('selected')});let fw=null;if(state.creativeStage&&FRAMEWORK_MAP.stage[state.creativeStage]){fw=FRAMEWORK_MAP.stage[state.creativeStage]}else if(state.audience.length){const priority=['VP / Director','Cross-Functional','Marketing Manager','Agency Partner','Copywriter','Designer'];for(const p of priority){if(state.audience.includes(p)&&FRAMEWORK_MAP.audience[p]){fw=FRAMEWORK_MAP.audience[p];break}}}state.framework=fw;if(fw){const pill=document.querySelector(`.framework-pills .pill[data-value="${fw}"]`);if(pill)pill.classList.add('auto-selected')}updateFrameworkExplainer(fw)}
+function autoSelectFramework(){document.querySelectorAll('.framework-segmented button').forEach(b=>{b.classList.remove('auto-selected');b.classList.remove('selected')});let fw=null;if(state.creativeStage&&FRAMEWORK_MAP.stage[state.creativeStage]){fw=FRAMEWORK_MAP.stage[state.creativeStage]}else if(state.audience.length){const priority=['VP / Director','Cross-Functional','Marketing Manager','Agency Partner','Copywriter','Designer'];for(const p of priority){if(state.audience.includes(p)&&FRAMEWORK_MAP.audience[p]){fw=FRAMEWORK_MAP.audience[p];break}}}state.framework=fw;if(fw){const btn=document.querySelector(`.framework-segmented button[data-value="${fw}"]`);if(btn)btn.classList.add('auto-selected')}updateFrameworkExplainer(fw)}
 
 function updateFrameworkExplainer(fw){const el=document.getElementById('framework-explainer');el.textContent=fw&&FRAMEWORK_EXPLAINERS[fw]?FRAMEWORK_EXPLAINERS[fw]:''}
 
