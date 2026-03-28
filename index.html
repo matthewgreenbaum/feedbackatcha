@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FeedbackAtcha</title>
-  <!-- v4.9 -->
+  <!-- v5.0 -->
   <script>
   // ============================================================
   // PASTE YOUR ANTHROPIC API KEY HERE:
@@ -147,8 +147,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* Context Panel */
 .context-panel{max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.16,1,0.3,1),padding 0.3s ease,opacity 0.3s ease;opacity:0;padding:0 28px}
 .context-panel.open{max-height:900px;opacity:1;padding:20px 28px 24px;border-top:1px solid var(--border-light);overflow-y:auto}
-.context-section{background:var(--surface-warm);border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:16px 18px;margin-bottom:14px}
+.context-section{border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:16px 18px;margin-bottom:14px;background:var(--surface-warm)}
 .context-section:last-child{margin-bottom:0}
+.context-section-framework{background:#F5F0FA;border-color:rgba(107,63,160,0.12)}
+.context-section-asset{background:#F0F4F8;border-color:rgba(59,130,246,0.12)}
+.context-section-details{background:var(--surface-warm);border-color:var(--border-light)}
 .context-section-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .context-section-title svg{width:16px;height:16px;color:var(--accent);flex-shrink:0}
 
@@ -304,8 +307,23 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <!-- Context Panel -->
       <div class="context-panel" id="context-panel">
 
+        <!-- Framework Section (own card) -->
+        <div class="context-section context-section-framework">
+          <div class="context-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Feedback Framework
+          </div>
+          <div class="segmented framework-segmented">
+            <button data-value="COIN">COIN</button>
+            <button data-value="I Like / I Wish / What If">I Like / I Wish</button>
+            <button data-value="SBI">SBI</button>
+            <button data-value="Plus/Delta">Plus / Delta</button>
+          </div>
+          <div class="framework-explainer" id="framework-explainer"></div>
+        </div>
+
         <!-- Asset Type Section -->
-        <div class="context-section">
+        <div class="context-section context-section-asset">
           <div class="context-section-title">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
             Asset Type
@@ -350,23 +368,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           </div>
         </div>
 
-        <!-- Framework Section (own card) -->
-        <div class="context-section">
-          <div class="context-section-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-            Feedback Framework
-          </div>
-          <div class="segmented framework-segmented">
-            <button data-value="COIN">COIN</button>
-            <button data-value="I Like / I Wish / What If">I Like / I Wish</button>
-            <button data-value="SBI">SBI</button>
-            <button data-value="Plus/Delta">Plus / Delta</button>
-          </div>
-          <div class="framework-explainer" id="framework-explainer"></div>
-        </div>
-
         <!-- Details Section -->
-        <div class="context-section">
+        <div class="context-section context-section-details">
           <div class="context-section-title">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
             Details
@@ -637,7 +640,7 @@ function initTiles(){document.querySelectorAll('.tile').forEach(tile=>{tile.addE
 
 function initSegmented(){document.querySelectorAll('.segmented button').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.segmented button').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.creativeStage=btn.dataset.value;updateContextTags();if(!state.frameworkManual)autoSelectFramework()})})}
 
-function initPills(){document.querySelectorAll('.audience-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{pill.classList.toggle('selected');const val=pill.dataset.value;if(state.audience.includes(val)){state.audience=state.audience.filter(a=>a!==val)}else{state.audience.push(val)}updateContextTags();if(!state.frameworkManual)autoSelectFramework()})});document.querySelectorAll('.goal-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'));pill.classList.add('selected');state.goal=pill.dataset.value;updateContextTags()})});document.querySelectorAll('.framework-segmented button').forEach(btn=>{btn.addEventListener('click',()=>{const wasSelected=btn.classList.contains('selected');document.querySelectorAll('.framework-segmented button').forEach(b=>{b.classList.remove('selected');b.classList.remove('auto-selected')});if(wasSelected){state.framework=null;state.frameworkManual=false;autoSelectFramework()}else{btn.classList.add('selected');state.framework=btn.dataset.value;state.frameworkManual=true;updateFrameworkExplainer(btn.dataset.value)}})})}
+function initPills(){document.querySelectorAll('.audience-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{pill.classList.toggle('selected');const val=pill.dataset.value;if(state.audience.includes(val)){state.audience=state.audience.filter(a=>a!==val)}else{state.audience.push(val)}updateContextTags();if(!state.frameworkManual)autoSelectFramework()})});document.querySelectorAll('.goal-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'));pill.classList.add('selected');state.goal=pill.dataset.value;updateContextTags()})});document.querySelectorAll('.framework-segmented button').forEach(btn=>{btn.addEventListener('click',()=>{const wasSelected=btn.classList.contains('selected')&&!btn.classList.contains('auto-selected');document.querySelectorAll('.framework-segmented button').forEach(b=>{b.classList.remove('selected');b.classList.remove('auto-selected')});if(wasSelected&&btn.dataset.value===state.framework){state.framework=null;state.frameworkManual=false;autoSelectFramework()}else{btn.classList.add('selected');state.framework=btn.dataset.value;state.frameworkManual=true;updateFrameworkExplainer(btn.dataset.value)}})})}
 const FRAMEWORK_MAP={audience:{'Designer':'COIN','Copywriter':'COIN','Agency Partner':'COIN','Marketing Manager':'I Like / I Wish / What If','VP / Director':'Plus/Delta','Cross-Functional':'SBI'},stage:{'First Draft':'I Like / I Wish / What If','Approval Ready':'Plus/Delta','Near Final':'Plus/Delta'}};
 const FRAMEWORK_EXPLAINERS={'COIN':'Context → Observation → Impact → Next steps. Best for actionable, direct feedback.','I Like / I Wish / What If':'Encouraging + exploratory. Great for early ideas and collaborative brainstorming.','SBI':'Situation → Behavior → Impact. Structured for formal reviews and cross-team communication.','Plus/Delta':'What\'s working + what to change. Fast, executive-friendly.'};
 
