@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FeedbackAtcha</title>
-  <!-- v5.4 -->
+  <!-- v5.5 -->
   <script>
   // ============================================================
   // PASTE YOUR ANTHROPIC API KEY HERE:
@@ -76,6 +76,12 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .tldr-callout{background:rgba(107,63,160,0.05);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:14px}
 .tldr-callout h3{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--accent);margin:0 0 4px!important;border:none!important;padding-top:0!important}
 .tldr-callout p{font-size:0.85rem;color:var(--text-secondary);margin-bottom:0}
+/* Severity badges */
+.severity-badge{display:inline-flex;align-items:center;gap:5px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;padding:2px 8px 2px 5px;border-radius:4px;vertical-align:middle;margin-right:4px;white-space:nowrap}
+.severity-badge svg{width:14px;height:14px;flex-shrink:0}
+.severity-critical{background:rgba(220,38,38,0.1);color:#DC2626}
+.severity-caution{background:rgba(217,119,6,0.1);color:#B45309}
+.severity-good{background:rgba(22,163,74,0.1);color:#16A34A}
 
 /* Chat avatars */
 .msg-ai-wrap{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;animation:msgIn 0.3s ease}
@@ -279,6 +285,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .expand-body .tldr-callout{background:rgba(107,63,160,0.05);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:12px 16px;margin-bottom:18px}
 .expand-body .tldr-callout h3{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 6px!important;border:none!important;padding-top:0!important}
 .expand-body .tldr-callout p{font-size:0.9rem;color:var(--text-secondary);margin:0}
+.expand-body .severity-badge{font-size:0.73rem;padding:3px 10px 3px 6px}
+.expand-body .severity-badge svg{width:15px;height:15px}
 .faq-item h3{font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px}
 .faq-item p{font-size:0.85rem;line-height:1.7;color:var(--text-secondary)}
 
@@ -657,6 +665,15 @@ WHEN REVIEWING ASSETS (only when user shares copy/creative + context):
 - Use frameworks like I Like / I Wish / What If, SBI, COIN, Plus/Delta, Strategic Alignment Check, or Directional + Executional as appropriate
 - End every feedback response with "### Framework" — a one-liner citing which feedback model(s) you used and why
 
+SEVERITY TAGS (REQUIRED for every numbered feedback point):
+- Prefix EVERY numbered feedback item with exactly one severity tag
+- [CRITICAL] — Must fix. Blockers, brand violations, factual errors, broken specs, anything that cannot ship as-is
+- [CAUTION] — Should address. Not a blocker but will hurt quality, performance, or clarity if ignored
+- [GOOD] — Working well. Positive reinforcement — call out what's strong so the team keeps doing it
+- Place the tag right after the number and before the bolded label, e.g.: "1. [CRITICAL] **Headline too long** — exceeds 40-char limit..."
+- Aim for a realistic mix. Do NOT mark everything as [GOOD]. Be honest and helpful.
+- In the TL;DR, summarize the severity breakdown if there are critical items (e.g., "2 critical issues to fix before this ships")
+
 BRAND COMPLIANCE (CRITICAL):
 - When brand guidelines are provided (text, PDF, or URL), you MUST actively compare the submitted asset against those guidelines
 - Explicitly flag ANY deviations: wrong colors, off-brand typography, logo misuse, voice/tone mismatches, messaging inconsistencies
@@ -731,6 +748,9 @@ function expandMessage(msgId){const bodyEl=document.getElementById(`${msgId}-bod
 function closeExpand(){document.getElementById('expand-overlay').classList.remove('open');document.getElementById('expand-modal').classList.remove('open')}
 
 function renderMarkdown(text){return text
+.replace(/\[CRITICAL\]/gi,'<span class="severity-badge severity-critical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Critical</span>')
+.replace(/\[CAUTION\]/gi,'<span class="severity-badge severity-caution"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Caution</span>')
+.replace(/\[GOOD\]/gi,'<span class="severity-badge severity-good"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Good</span>')
 .replace(/### (.+)/g,'<h3>$1</h3>')
 .replace(/## (.+)/g,'<h3>$1</h3>')
 .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
