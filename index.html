@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FeedbackAtcha</title>
-  <!-- v5.2 -->
+  <!-- v5.3 -->
   <script>
   // ============================================================
   // PASTE YOUR ANTHROPIC API KEY HERE:
@@ -60,10 +60,12 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .msg-user{background:var(--accent-light);margin-left:auto;border-bottom-right-radius:4px}
 .msg-user .msg-body{color:var(--text-primary);white-space:pre-wrap;word-wrap:break-word}
 .msg-ai{background:var(--surface-warm);border:1px solid var(--border-light);margin-right:auto;border-bottom-left-radius:4px;position:relative;max-width:92%}
-.msg-ai .msg-header{display:flex;align-items:center;justify-content:flex-end;margin-bottom:4px}
+.msg-ai .msg-header{display:flex;align-items:center;justify-content:flex-end;margin-bottom:4px;gap:6px}
 .msg-ai .copy-msg-btn{background:var(--surface);border:1px solid var(--border);padding:5px 12px;border-radius:50px;font-size:0.68rem;font-weight:600;cursor:pointer;color:var(--text-secondary);font-family:inherit;transition:var(--transition);display:flex;align-items:center;gap:5px}
 .msg-ai .copy-msg-btn svg{width:13px;height:13px;flex-shrink:0}
-.msg-ai .copy-msg-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.msg-ai .copy-msg-btn:hover,.msg-ai .expand-msg-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.msg-ai .expand-msg-btn{background:var(--surface);border:1px solid var(--border);padding:5px 10px;border-radius:50px;font-size:0.68rem;font-weight:600;cursor:pointer;color:var(--text-secondary);font-family:inherit;transition:var(--transition);display:flex;align-items:center;gap:5px}
+.msg-ai .expand-msg-btn svg{width:13px;height:13px;flex-shrink:0}
 .msg-ai .msg-body h3{color:var(--accent);font-size:0.92rem;font-weight:600;margin-top:18px;margin-bottom:6px;padding-top:12px;border-top:1px solid var(--border-light)}
 .msg-ai .msg-body h3:first-child{margin-top:0;padding-top:0;border-top:none}
 .msg-ai .msg-body p{font-size:0.88rem;line-height:1.7;color:var(--text-primary);margin-bottom:6px}
@@ -250,6 +252,29 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .about-body{padding:8px 28px 28px}
 .faq-item{padding:16px 0;border-bottom:1px solid var(--border-light)}
 .faq-item:last-child{border-bottom:none}
+
+/* Expand Feedback Modal */
+.expand-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:500;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(4px)}
+.expand-overlay.open{opacity:1;pointer-events:all}
+.expand-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.95);width:720px;max-width:94vw;max-height:88vh;background:var(--surface);border-radius:20px;box-shadow:var(--shadow-xl);z-index:501;opacity:0;pointer-events:none;transition:all 0.3s cubic-bezier(0.16,1,0.3,1);display:flex;flex-direction:column}
+.expand-modal.open{opacity:1;pointer-events:all;transform:translate(-50%,-50%) scale(1)}
+.expand-header{display:flex;align-items:center;justify-content:space-between;padding:20px 28px;border-bottom:1px solid var(--border-light);flex-shrink:0}
+.expand-header-actions{display:flex;align-items:center;gap:8px}
+.expand-copy-btn{background:var(--surface);border:1px solid var(--border);padding:6px 14px;border-radius:50px;font-size:0.75rem;font-weight:600;cursor:pointer;color:var(--text-secondary);font-family:inherit;transition:var(--transition);display:flex;align-items:center;gap:6px}
+.expand-copy-btn svg{width:14px;height:14px;flex-shrink:0}
+.expand-copy-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.expand-body{padding:28px 32px;overflow-y:auto;flex:1}
+.expand-body h3{color:var(--accent);font-size:1rem;font-weight:600;margin-top:22px;margin-bottom:8px;padding-top:14px;border-top:1px solid var(--border-light)}
+.expand-body h3:first-child{margin-top:0;padding-top:0;border-top:none}
+.expand-body p{font-size:0.95rem;line-height:1.8;color:var(--text-primary);margin-bottom:8px}
+.expand-body ul{padding-left:20px;margin:8px 0}
+.expand-body ol{padding-left:24px;margin:10px 0}
+.expand-body li{font-size:0.95rem;line-height:1.8;color:var(--text-primary);margin-bottom:5px}
+.expand-body ol li::marker{color:var(--accent);font-weight:600}
+.expand-body strong{font-weight:600}
+.expand-body .tldr-callout{background:rgba(107,63,160,0.05);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:12px 16px;margin-bottom:18px}
+.expand-body .tldr-callout h3{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 6px!important;border:none!important;padding-top:0!important}
+.expand-body .tldr-callout p{font-size:0.9rem;color:var(--text-secondary);margin:0}
 .faq-item h3{font-size:0.88rem;font-weight:600;color:var(--text-primary);margin-bottom:6px}
 .faq-item p{font-size:0.85rem;line-height:1.7;color:var(--text-secondary)}
 
@@ -518,6 +543,23 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
 </div>
 
+<!-- Expand Feedback Modal -->
+<div class="expand-overlay" id="expand-overlay"></div>
+<div class="expand-modal" id="expand-modal">
+  <div class="expand-header">
+    <div class="expand-header-actions">
+      <button class="expand-copy-btn" id="expand-copy-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span>Copy feedback</span>
+      </button>
+    </div>
+    <button class="btn-icon" id="expand-close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="expand-body" id="expand-body"></div>
+</div>
+
 <!-- Settings Overlay + Panel (RIGHT side) -->
 <div class="settings-overlay" id="settings-overlay"></div>
 <div class="settings-panel" id="settings-panel">
@@ -668,18 +710,21 @@ function loadBrandSettings(){const saved=localStorage.getItem('feedbackatcha_bra
 
 function initCTA(){document.getElementById('cta-btn').addEventListener('click',submitMessage);document.getElementById('chat-send-btn').addEventListener('click',submitMessage)}
 
-function initAbout(){const overlay=document.getElementById('about-overlay');const modal=document.getElementById('about-modal');const open=()=>{overlay.classList.add('open');modal.classList.add('open')};const close=()=>{overlay.classList.remove('open');modal.classList.remove('open')};document.getElementById('about-link').addEventListener('click',open);document.getElementById('about-close').addEventListener('click',close);overlay.addEventListener('click',close)}
+function initAbout(){const overlay=document.getElementById('about-overlay');const modal=document.getElementById('about-modal');const open=()=>{overlay.classList.add('open');modal.classList.add('open')};const close=()=>{overlay.classList.remove('open');modal.classList.remove('open')};document.getElementById('about-link').addEventListener('click',open);document.getElementById('about-close').addEventListener('click',close);overlay.addEventListener('click',close);document.getElementById('expand-close').addEventListener('click',closeExpand);document.getElementById('expand-overlay').addEventListener('click',closeExpand);document.getElementById('expand-copy-btn').addEventListener('click',()=>{const body=document.getElementById('expand-body');navigator.clipboard.writeText(body.innerText).then(()=>{const span=document.querySelector('#expand-copy-btn span');if(span){span.textContent='Copied!';setTimeout(()=>span.textContent='Copy feedback',2000)}})})}
 
 async function submitMessage(){const input=document.getElementById('main-input');const text=input.value.trim();if(!text&&!state.uploadedFileBase64)return showError('Give me something to work with — paste copy, upload a file, or tell me what you need.');clearError();const MODE_LABELS={'full-read':'Full Read','quick-take':'Quick Take','just-draft':'Just Draft It'};let contextParts=[];if(state.assetType)contextParts.push(`Asset Type: ${state.assetType}`);if(state.creativeStage)contextParts.push(`Creative Stage: ${state.creativeStage}`);if(state.audience.length)contextParts.push(`Feedback Audience: ${state.audience.join(', ')}`);if(state.goal)contextParts.push(`Goal: ${state.goal}`);if(state.notes)contextParts.push(`Additional Context: ${state.notes}`);let brandContext='';if(state.brandSettings.enabled&&hasBrandData()){const b=state.brandSettings;brandContext=`\n\nBRAND PROFILE (active — CRITICALLY IMPORTANT: compare the uploaded asset against these guidelines and explicitly flag ANY deviations in colors, logo usage, typography, voice/tone, or other brand standards):`;if(b.colors.length)brandContext+=`\nBrand Colors: ${b.colors.join(', ')}`;if(b.websiteUrl)brandContext+=`\nWebsite: ${b.websiteUrl}`;if(b.guidelines)brandContext+=`\nGuidelines: ${b.guidelines}`;if(b.guidelinesUrl)brandContext+=`\nGuidelines Link: ${b.guidelinesUrl}`}let modeInstruction='';const fwName=state.framework||'the most appropriate framework';const fwInstruction=state.framework?`Use the ${state.framework} feedback framework.`:`Choose the most appropriate feedback framework (COIN, I Like / I Wish / What If, SBI, or Plus/Delta).`;if(state.conversationHistory.length===0||contextParts.length){if(state.mode==='full-read'){modeInstruction=`\n\nMODE: Full Read — ${fwInstruction} Start with "### TL;DR" (1-2 sentence overall take), then "### What's Working" (numbered points), then "### Improvements" (numbered points with bolded labels). If brand guidelines are provided, include "### Brand Compliance" section flagging any deviations. End with "### Framework" — one line citing which feedback model you used.`}else if(state.mode==='quick-take'){modeInstruction=`\n\nMODE: Quick Take — ${fwInstruction} Start with "### TL;DR" (1 sharp sentence), then "### Feedback" (numbered points with bolded labels, concise). If brand guidelines are provided, flag deviations inline. End with "### Framework" — one line citing which feedback model you used.`}else{modeInstruction=`\n\nMODE: Just Draft It — ${fwInstruction} Start with "### TL;DR" (1-2 sentences), then "### Feedback Draft" (the polished feedback copy, ready to send). If brand guidelines are provided, weave compliance notes in. End with "### Framework" — one line citing which feedback model you used.`}}let userMessage=text;if(contextParts.length)userMessage+=`\n\nCONTEXT:\n- ${contextParts.join('\n- ')}`;userMessage+=modeInstruction+brandContext;const displayText=text||MODE_LABELS[state.mode]||'Generate Feedback';addUserMessage(displayText);input.value='';input.style.height='auto';document.querySelector('.hero').classList.add('collapsed');document.getElementById('context-panel').classList.remove('open');document.getElementById('context-bar-toggle').classList.remove('active');updateContextSummary();const content=[];const isFirstMsg=state.conversationHistory.length===0;if(isFirstMsg&&state.brandSettings.enabled&&state.brandSettings.guidelinesFileBase64){const gt=state.brandSettings.guidelinesFileType;if(gt&&gt.startsWith('image/')){content.push({type:'image',source:{type:'base64',media_type:gt,data:state.brandSettings.guidelinesFileBase64}})}else if(gt==='application/pdf'){content.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:state.brandSettings.guidelinesFileBase64}})}}if(state.uploadedFileBase64){if(state.uploadedFileType&&state.uploadedFileType.startsWith('image/')){content.push({type:'image',source:{type:'base64',media_type:state.uploadedFileType,data:state.uploadedFileBase64}})}else if(state.uploadedFileType==='application/pdf'){content.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:state.uploadedFileBase64}})}}content.push({type:'text',text:userMessage});state.conversationHistory.push({role:'user',content});setLoading(true);try{await streamToThread(state.conversationHistory)}catch(err){showError('Something went wrong: '+err.message);setLoading(false)}}
 
 function addUserMessage(text){const thread=document.getElementById('thread');thread.classList.add('active');const wrap=document.createElement('div');wrap.className='msg-user-wrap';const msg=document.createElement('div');msg.className='msg msg-user';msg.innerHTML=`<div class="msg-body">${escapeHtml(text)}</div>`;const avatar=document.createElement('div');avatar.className='user-avatar-chat';avatar.innerHTML=getUserAvatarHTML();wrap.appendChild(msg);wrap.appendChild(avatar);thread.appendChild(wrap);scrollThread()}
 
-async function streamToThread(messages){const thread=document.getElementById('thread');const msgId='ai-msg-'+Date.now();const wrap=document.createElement('div');wrap.className='msg-ai-wrap';const orb=document.createElement('div');orb.className='orb-chat';const msg=document.createElement('div');msg.className='msg msg-ai';msg.id=msgId;msg.innerHTML=`<div class="msg-header" id="${msgId}-header" style="display:none"><button class="copy-msg-btn" onclick="copyMessage('${msgId}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div><div class="msg-body" id="${msgId}-body"></div>`;wrap.appendChild(orb);wrap.appendChild(msg);thread.appendChild(wrap);scrollThread();const bodyEl=document.getElementById(`${msgId}-body`);const response=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ANTHROPIC_API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4096,system:SYSTEM_PROMPT,messages:messages,stream:true})});if(!response.ok){const errBody=await response.text();throw new Error(`API returned ${response.status}: ${errBody}`)}const reader=response.body.getReader();const decoder=new TextDecoder();let fullText='';let buffer='';while(true){const{done,value}=await reader.read();if(done)break;buffer+=decoder.decode(value,{stream:true});const lines=buffer.split('\n');buffer=lines.pop()||'';for(const line of lines){if(line.startsWith('data: ')){const data=line.slice(6);if(data==='[DONE]')continue;try{const parsed=JSON.parse(data);if(parsed.type==='content_block_delta'&&parsed.delta?.text){fullText+=parsed.delta.text;bodyEl.innerHTML=renderMarkdown(fullText);scrollThread()}}catch(e){}}}}state.lastAiText=fullText;state.conversationHistory.push({role:'assistant',content:fullText});if(fullText.length>150){const hdr=document.getElementById(`${msgId}-header`);if(hdr)hdr.style.display='flex'}setLoading(false);scrollThread()}
+async function streamToThread(messages){const thread=document.getElementById('thread');const msgId='ai-msg-'+Date.now();const wrap=document.createElement('div');wrap.className='msg-ai-wrap';const orb=document.createElement('div');orb.className='orb-chat';const msg=document.createElement('div');msg.className='msg msg-ai';msg.id=msgId;msg.innerHTML=`<div class="msg-header" id="${msgId}-header" style="display:none"><button class="expand-msg-btn" onclick="expandMessage('${msgId}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg><span>Expand</span></button><button class="copy-msg-btn" onclick="copyMessage('${msgId}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button></div><div class="msg-body" id="${msgId}-body"></div>`;wrap.appendChild(orb);wrap.appendChild(msg);thread.appendChild(wrap);scrollThread();const bodyEl=document.getElementById(`${msgId}-body`);const response=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ANTHROPIC_API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4096,system:SYSTEM_PROMPT,messages:messages,stream:true})});if(!response.ok){const errBody=await response.text();throw new Error(`API returned ${response.status}: ${errBody}`)}const reader=response.body.getReader();const decoder=new TextDecoder();let fullText='';let buffer='';while(true){const{done,value}=await reader.read();if(done)break;buffer+=decoder.decode(value,{stream:true});const lines=buffer.split('\n');buffer=lines.pop()||'';for(const line of lines){if(line.startsWith('data: ')){const data=line.slice(6);if(data==='[DONE]')continue;try{const parsed=JSON.parse(data);if(parsed.type==='content_block_delta'&&parsed.delta?.text){fullText+=parsed.delta.text;bodyEl.innerHTML=renderMarkdown(fullText);scrollThread()}}catch(e){}}}}state.lastAiText=fullText;state.conversationHistory.push({role:'assistant',content:fullText});if(fullText.length>150){const hdr=document.getElementById(`${msgId}-header`);if(hdr)hdr.style.display='flex'}setLoading(false);scrollThread()}
 
 function scrollThread(){const thread=document.getElementById('thread');thread.scrollTop=thread.scrollHeight}
 
 
 function copyMessage(msgId){const bodyEl=document.getElementById(`${msgId}-body`);if(!bodyEl)return;navigator.clipboard.writeText(bodyEl.innerText).then(()=>{const btn=document.querySelector(`#${msgId} .copy-msg-btn span`);if(btn){btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',2000)}})}
+
+function expandMessage(msgId){const bodyEl=document.getElementById(`${msgId}-body`);if(!bodyEl)return;const expandBody=document.getElementById('expand-body');expandBody.innerHTML=bodyEl.innerHTML;document.getElementById('expand-overlay').classList.add('open');document.getElementById('expand-modal').classList.add('open');expandBody._sourceMsgId=msgId}
+function closeExpand(){document.getElementById('expand-overlay').classList.remove('open');document.getElementById('expand-modal').classList.remove('open')}
 
 function renderMarkdown(text){return text
 .replace(/### (.+)/g,'<h3>$1</h3>')
