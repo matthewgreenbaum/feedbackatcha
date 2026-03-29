@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FeedbackAtcha</title>
-  <!-- v6.1 -->
+  <!-- v6.2 -->
   <script>
   // ============================================================
   // PASTE YOUR ANTHROPIC API KEY HERE:
@@ -149,7 +149,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .context-bar-toggle svg{flex-shrink:0}
 .context-tags{display:flex;flex-wrap:wrap;gap:4px}
 .context-tag{font-size:0.7rem;font-weight:500;padding:4px 12px;border-radius:50px;background:var(--accent-light);color:var(--accent);border:1px solid rgba(107,63,160,0.15);display:flex;align-items:center;gap:4px}
-.context-tag-framework{background:rgba(107,63,160,0.08);color:#5B2D8E;border-color:rgba(107,63,160,0.2)}
 .context-tag-asset{background:rgba(59,130,246,0.08);color:#2563EB;border-color:rgba(59,130,246,0.2)}
 .context-tag-details{background:rgba(52,168,115,0.08);color:#1B7A42;border-color:rgba(52,168,115,0.2)}
 .context-tag .remove-tag{background:none;border:none;cursor:pointer;color:currentColor;font-size:0.85rem;line-height:1;padding:0 0 0 2px;opacity:0.6}
@@ -160,7 +159,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .context-panel.open{max-height:900px;opacity:1;padding:20px 28px 24px;border-top:1px solid var(--border-light);overflow-y:auto}
 .context-section{border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:16px 18px;margin-bottom:14px;background:var(--surface-warm)}
 .context-section:last-child{margin-bottom:0}
-.context-section-framework{background:#F5F0FA;border-color:rgba(107,63,160,0.12)}
 .context-section-asset{background:#F0F4F8;border-color:rgba(59,130,246,0.12)}
 .context-section-details{background:#F0F7F4;border-color:rgba(52,168,115,0.12)}
 .context-section-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
@@ -182,9 +180,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .segmented button{flex:1;padding:7px 4px;font-size:0.72rem;border:none;background:transparent;cursor:pointer;color:var(--text-secondary);transition:var(--transition);font-family:inherit;font-weight:500;border-radius:8px}
 .segmented button:hover{color:var(--text-primary)}
 /* Framework segmented — lavender family */
-.framework-segmented button.selected{background:#E8DCF5;color:#5B2D8E;box-shadow:var(--shadow-sm);font-weight:600}
-.framework-segmented button.auto-selected{background:transparent;color:#7B4FA8;box-shadow:none;border:1px dashed rgba(107,63,160,0.4);margin:-1px}
-.framework-segmented button:hover{color:#7B4FA8}
 /* Details segmented — green family */
 .context-section-details .segmented button.selected{background:#D6EDE0;color:#1B7A42;box-shadow:var(--shadow-sm);font-weight:600}
 .context-section-details .segmented button:hover{color:#2D8A54}
@@ -193,7 +188,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* Details pills — green family */
 .context-section-details .pill:hover{border-color:#2D8A54;color:#2D8A54}
 .context-section-details .pill.selected{border-color:#2D8A54;background:rgba(52,168,115,0.1);color:#1B7A42;font-weight:600}
-.framework-explainer{font-size:0.62rem;color:var(--text-tertiary);padding-left:2px;margin-top:6px;min-height:0;transition:all 0.2s ease;line-height:1.4}
 .context-notes{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-xs);font-family:inherit;font-size:0.82rem;resize:vertical;min-height:56px;color:var(--text-primary);background:var(--surface);line-height:1.5}
 .context-notes:focus{outline:none;border-color:var(--accent)}
 .context-notes::placeholder{color:var(--text-tertiary)}
@@ -354,19 +348,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <!-- Context Panel -->
       <div class="context-panel" id="context-panel">
 
-        <!-- Framework Section (own card) -->
-        <div class="context-section context-section-framework">
-          <div class="context-section-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-            Feedback Framework
-          </div>
-          <div class="segmented framework-segmented">
-            <button data-value="COIN">COIN</button>
-            <button data-value="I Like / I Wish / What If">I Like / I Wish</button>
-            <button data-value="Plus/Delta">Plus / Delta</button>
-          </div>
-          <div class="framework-explainer" id="framework-explainer"></div>
-        </div>
 
         <!-- Asset Type Section -->
         <div class="context-section context-section-asset">
@@ -509,7 +490,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     </div>
     <div class="faq-item">
       <h3>How does it work?</h3>
-      <p>Paste your copy, upload a creative asset, or just share your raw impressions. Select the asset type and context, and FeedbackAtcha generates structured, professional feedback using proven frameworks like COIN, I Like / I Wish / What If, and Plus/Delta.</p>
+      <p>Paste your copy, upload a creative asset, or just share your raw impressions. Select the asset type and context, and FeedbackAtcha generates structured, professional feedback using the right framework for the situation.</p>
     </div>
     <div class="faq-item">
       <h3>What are the three modes?</h3>
@@ -700,7 +681,7 @@ RULES:
 - Collaborative tone always. Protect relationships.
 - When not reviewing an asset, be conversational and brief.`;
 
-const state={assetTypes:[],creativeStage:null,audience:[],goal:null,notes:'',mode:'full-read',framework:null,frameworkManual:false,uploadedFile:null,uploadedFileBase64:null,uploadedFileType:null,conversationHistory:[],lastAiText:'',brandSettings:{colors:[],websiteUrl:'',guidelines:'',guidelinesUrl:'',guidelinesFileBase64:null,guidelinesFileType:null,guidelinesFileName:null,enabled:true},avatar:{type:'default',value:''},userName:''};
+const state={assetTypes:[],creativeStage:null,audience:[],goal:null,notes:'',mode:'full-read',framework:null,uploadedFile:null,uploadedFileBase64:null,uploadedFileType:null,conversationHistory:[],lastAiText:'',brandSettings:{colors:[],websiteUrl:'',guidelines:'',guidelinesUrl:'',guidelinesFileBase64:null,guidelinesFileType:null,guidelinesFileName:null,enabled:true},avatar:{type:'default',value:''},userName:''};
 
 const MODE_EXPLAINERS={'full-read':'Situation read + framework + full draft','quick-take':'One sharp take + draft','just-draft':'Skip the preamble, just draft it'};
 
@@ -711,19 +692,17 @@ function autoResizeTextarea(){const ta=document.getElementById('main-input');ta.
 function initContextBar(){const panel=document.getElementById('context-panel');const toggle=document.getElementById('context-bar-toggle');const summary=document.getElementById('context-summary');toggle.addEventListener('click',()=>{const isOpen=panel.classList.toggle('open');toggle.classList.toggle('active',isOpen);updateContextSummary()});}
 function updateContextSummary(){const panel=document.getElementById('context-panel');const toggle=document.getElementById('context-bar-toggle');const summary=document.getElementById('context-summary');const isOpen=panel.classList.contains('open');const tags=[];tags.push(...state.assetTypes);if(state.creativeStage)tags.push(1);tags.push(...state.audience);if(state.goal)tags.push(1);if(isOpen){summary.textContent=tags.length?`Hide details (${tags.length})`:'Hide details'}else{summary.textContent=tags.length?`Details (${tags.length})`:'Add details'}}
 
-function updateContextTags(){const container=document.getElementById('context-tags');const tags=[];if(state.framework)tags.push({label:state.framework,category:'framework',clear:()=>{state.framework=null;state.frameworkManual=false;document.querySelectorAll('.framework-segmented button').forEach(b=>{b.classList.remove('selected');b.classList.remove('auto-selected')});document.getElementById('framework-explainer').textContent=''}});state.assetTypes.forEach(a=>tags.push({label:a,category:'asset',clear:()=>{state.assetTypes=state.assetTypes.filter(x=>x!==a);document.querySelectorAll('.tile').forEach(t=>{if(t.dataset.value===a)t.classList.remove('selected')})}}));if(state.creativeStage)tags.push({label:state.creativeStage,category:'details',clear:()=>{state.creativeStage=null;document.querySelectorAll('.segmented button').forEach(b=>b.classList.remove('selected'))}});state.audience.forEach(a=>tags.push({label:a,category:'details',clear:()=>{state.audience=state.audience.filter(x=>x!==a);document.querySelectorAll('.audience-pills .pill').forEach(p=>{if(p.dataset.value===a)p.classList.remove('selected')})}}));if(state.goal)tags.push({label:state.goal,category:'details',clear:()=>{state.goal=null;document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'))}});container.innerHTML=tags.map((t,i)=>`<span class="context-tag context-tag-${t.category}">${t.label}<button class="remove-tag" data-idx="${i}">&times;</button></span>`).join('');container.querySelectorAll('.remove-tag').forEach((btn,i)=>{btn.addEventListener('click',(e)=>{e.stopPropagation();tags[i].clear();updateContextTags()})});updateContextSummary()}
+function updateContextTags(){const container=document.getElementById('context-tags');const tags=[];state.assetTypes.forEach(a=>tags.push({label:a,category:'asset',clear:()=>{state.assetTypes=state.assetTypes.filter(x=>x!==a);document.querySelectorAll('.tile').forEach(t=>{if(t.dataset.value===a)t.classList.remove('selected')})}}));if(state.creativeStage)tags.push({label:state.creativeStage,category:'details',clear:()=>{state.creativeStage=null;document.querySelectorAll('.stage-segmented button').forEach(b=>b.classList.remove('selected'))}});state.audience.forEach(a=>tags.push({label:a,category:'details',clear:()=>{state.audience=state.audience.filter(x=>x!==a);document.querySelectorAll('.audience-pills .pill').forEach(p=>{if(p.dataset.value===a)p.classList.remove('selected')})}}));if(state.goal)tags.push({label:state.goal,category:'details',clear:()=>{state.goal=null;document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'))}});container.innerHTML=tags.map((t,i)=>`<span class="context-tag context-tag-${t.category}">${t.label}<button class="remove-tag" data-idx="${i}">&times;</button></span>`).join('');container.querySelectorAll('.remove-tag').forEach((btn,i)=>{btn.addEventListener('click',(e)=>{e.stopPropagation();tags[i].clear();updateContextTags()})});updateContextSummary()}
 
 function initTiles(){document.querySelectorAll('.tile').forEach(tile=>{tile.addEventListener('click',()=>{tile.classList.toggle('selected');const val=tile.dataset.value;if(state.assetTypes.includes(val)){state.assetTypes=state.assetTypes.filter(a=>a!==val)}else{state.assetTypes.push(val)}updateContextTags()})})}
 
-function initSegmented(){document.querySelectorAll('.stage-segmented button').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.stage-segmented button').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.creativeStage=btn.dataset.value;if(!state.frameworkManual)autoSelectFramework();updateContextTags()})})}
+function initSegmented(){document.querySelectorAll('.stage-segmented button').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.stage-segmented button').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.creativeStage=btn.dataset.value;autoSelectFramework();updateContextTags()})})}
 
-function initPills(){document.querySelectorAll('.audience-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{pill.classList.toggle('selected');const val=pill.dataset.value;if(state.audience.includes(val)){state.audience=state.audience.filter(a=>a!==val)}else{state.audience.push(val)}if(!state.frameworkManual)autoSelectFramework();updateContextTags()})});document.querySelectorAll('.goal-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'));pill.classList.add('selected');state.goal=pill.dataset.value;updateContextTags()})});document.querySelectorAll('.framework-segmented button').forEach(btn=>{btn.addEventListener('click',()=>{const wasSelected=btn.classList.contains('selected')&&!btn.classList.contains('auto-selected');document.querySelectorAll('.framework-segmented button').forEach(b=>{b.classList.remove('selected');b.classList.remove('auto-selected')});if(wasSelected&&btn.dataset.value===state.framework){state.framework=null;state.frameworkManual=false;autoSelectFramework()}else{btn.classList.add('selected');state.framework=btn.dataset.value;state.frameworkManual=true;updateFrameworkExplainer(btn.dataset.value)}updateContextTags()})})}
+function initPills(){document.querySelectorAll('.audience-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{pill.classList.toggle('selected');const val=pill.dataset.value;if(state.audience.includes(val)){state.audience=state.audience.filter(a=>a!==val)}else{state.audience.push(val)}autoSelectFramework();updateContextTags()})});document.querySelectorAll('.goal-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'));pill.classList.add('selected');state.goal=pill.dataset.value;updateContextTags()})})}
 const FRAMEWORK_MAP={audience:{'Designer':'COIN','Copywriter':'COIN','Agency Partner':'COIN','Marketing Manager':'I Like / I Wish / What If','VP / Director':'Plus/Delta','Cross-Functional':'COIN'},stage:{'First Draft':'I Like / I Wish / What If','In Review':'COIN','Approval Ready':'Plus/Delta'}};
-const FRAMEWORK_EXPLAINERS={'COIN':'Context → Observation → Impact → Next steps. Best for actionable, direct feedback.','I Like / I Wish / What If':'Encouraging + exploratory. Great for early ideas and collaborative brainstorming.','Plus/Delta':'What\'s working + what to change. Fast, executive-friendly.'};
 
-function autoSelectFramework(){document.querySelectorAll('.framework-segmented button').forEach(b=>{b.classList.remove('auto-selected');b.classList.remove('selected')});let fw=null;if(state.creativeStage&&FRAMEWORK_MAP.stage[state.creativeStage]){fw=FRAMEWORK_MAP.stage[state.creativeStage]}else if(state.audience.length){const priority=['VP / Director','Cross-Functional','Marketing Manager','Agency Partner','Copywriter','Designer'];for(const p of priority){if(state.audience.includes(p)&&FRAMEWORK_MAP.audience[p]){fw=FRAMEWORK_MAP.audience[p];break}}}state.framework=fw;if(fw){const btn=document.querySelector(`.framework-segmented button[data-value="${fw}"]`);if(btn)btn.classList.add('auto-selected')}updateFrameworkExplainer(fw)}
+function autoSelectFramework(){let fw=null;if(state.creativeStage&&FRAMEWORK_MAP.stage[state.creativeStage]){fw=FRAMEWORK_MAP.stage[state.creativeStage]}else if(state.audience.length){const priority=['VP / Director','Cross-Functional','Marketing Manager','Agency Partner','Copywriter','Designer'];for(const p of priority){if(state.audience.includes(p)&&FRAMEWORK_MAP.audience[p]){fw=FRAMEWORK_MAP.audience[p];break}}}state.framework=fw}
 
-function updateFrameworkExplainer(fw){const el=document.getElementById('framework-explainer');el.textContent=fw&&FRAMEWORK_EXPLAINERS[fw]?FRAMEWORK_EXPLAINERS[fw]:''}
 
 function initModeSlider(){const options=document.querySelectorAll('.mode-option');const thumb=document.querySelector('.mode-slider-thumb');const explainer=document.getElementById('mode-explainer');function updateThumb(s){thumb.style.width=s.offsetWidth+'px';thumb.style.left=s.offsetLeft+'px'}options.forEach(opt=>{opt.addEventListener('click',()=>{options.forEach(o=>o.classList.remove('selected'));opt.classList.add('selected');state.mode=opt.dataset.value;updateThumb(opt);explainer.textContent=MODE_EXPLAINERS[opt.dataset.value]||''})});setTimeout(()=>{const s=document.querySelector('.mode-option.selected');if(s)updateThumb(s)},100);window.addEventListener('resize',()=>{const s=document.querySelector('.mode-option.selected');if(s)updateThumb(s)})}
 
@@ -742,7 +721,7 @@ function loadBrandSettings(){const saved=localStorage.getItem('feedbackatcha_bra
 
 function initCTA(){document.getElementById('cta-btn').addEventListener('click',submitMessage);document.getElementById('chat-send-btn').addEventListener('click',submitMessage);document.getElementById('new-session-btn').addEventListener('click',resetSession)}
 
-function resetSession(){state.assetTypes=[];state.creativeStage=null;state.audience=[];state.goal=null;state.notes='';state.mode='full-read';state.framework=null;state.frameworkManual=false;state.uploadedFile=null;state.uploadedFileBase64=null;state.uploadedFileType=null;state.conversationHistory=[];state.lastAiText='';document.getElementById('thread').innerHTML='';document.getElementById('thread').classList.remove('active');document.querySelector('.hero').classList.remove('collapsed');document.querySelectorAll('.tile').forEach(t=>t.classList.remove('selected'));document.querySelectorAll('.segmented button').forEach(b=>b.classList.remove('selected'));document.querySelectorAll('.audience-pills .pill').forEach(p=>p.classList.remove('selected'));document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'));document.querySelectorAll('.framework-segmented button').forEach(b=>{b.classList.remove('selected');b.classList.remove('auto-selected')});document.getElementById('framework-explainer').textContent='';document.getElementById('notes-input').value='';document.getElementById('upload-preview').innerHTML='';document.getElementById('file-input').value='';document.getElementById('main-input').value='';document.getElementById('main-input').style.height='auto';document.getElementById('context-panel').classList.remove('open');document.getElementById('context-bar-toggle').classList.remove('active');document.getElementById('context-tags').innerHTML='';document.getElementById('new-session-btn').style.display='none';updateContextSummary();const modeSlider=document.querySelectorAll('.mode-slider button');modeSlider.forEach(b=>b.classList.remove('selected'));if(modeSlider[0])modeSlider[0].classList.add('selected')}
+function resetSession(){state.assetTypes=[];state.creativeStage=null;state.audience=[];state.goal=null;state.notes='';state.mode='full-read';state.framework=null;state.uploadedFile=null;state.uploadedFileBase64=null;state.uploadedFileType=null;state.conversationHistory=[];state.lastAiText='';document.getElementById('thread').innerHTML='';document.getElementById('thread').classList.remove('active');document.querySelector('.hero').classList.remove('collapsed');document.querySelectorAll('.tile').forEach(t=>t.classList.remove('selected'));document.querySelectorAll('.stage-segmented button').forEach(b=>b.classList.remove('selected'));document.querySelectorAll('.audience-pills .pill').forEach(p=>p.classList.remove('selected'));document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'));document.getElementById('notes-input').value='';document.getElementById('upload-preview').innerHTML='';document.getElementById('file-input').value='';document.getElementById('main-input').value='';document.getElementById('main-input').style.height='auto';document.getElementById('context-panel').classList.remove('open');document.getElementById('context-bar-toggle').classList.remove('active');document.getElementById('context-tags').innerHTML='';document.getElementById('new-session-btn').style.display='none';updateContextSummary();const modeSlider=document.querySelectorAll('.mode-slider button');modeSlider.forEach(b=>b.classList.remove('selected'));if(modeSlider[0])modeSlider[0].classList.add('selected')}
 
 function initAbout(){const overlay=document.getElementById('about-overlay');const modal=document.getElementById('about-modal');const open=()=>{overlay.classList.add('open');modal.classList.add('open')};const close=()=>{overlay.classList.remove('open');modal.classList.remove('open')};document.getElementById('about-link').addEventListener('click',open);document.getElementById('about-close').addEventListener('click',close);overlay.addEventListener('click',close);document.getElementById('expand-close').addEventListener('click',closeExpand);document.getElementById('expand-overlay').addEventListener('click',closeExpand);document.getElementById('expand-copy-btn').addEventListener('click',()=>{const body=document.getElementById('expand-body');navigator.clipboard.writeText(body.innerText).then(()=>{const span=document.querySelector('#expand-copy-btn span');if(span){span.textContent='Copied!';setTimeout(()=>span.textContent='Copy feedback',2000)}})})}
 
