@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FeedbackAtcha</title>
-  <!-- v6.0 -->
+  <!-- v6.1 -->
   <script>
   // ============================================================
   // PASTE YOUR ANTHROPIC API KEY HERE:
@@ -422,7 +422,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
           </div>
           <div style="margin-bottom:14px">
             <div class="asset-category-label">Creative Stage</div>
-            <div class="segmented">
+            <div class="segmented stage-segmented">
               <button data-value="First Draft">First Draft</button>
               <button data-value="In Review">In Review</button>
               <button data-value="Approval Ready">Final</button>
@@ -715,9 +715,9 @@ function updateContextTags(){const container=document.getElementById('context-ta
 
 function initTiles(){document.querySelectorAll('.tile').forEach(tile=>{tile.addEventListener('click',()=>{tile.classList.toggle('selected');const val=tile.dataset.value;if(state.assetTypes.includes(val)){state.assetTypes=state.assetTypes.filter(a=>a!==val)}else{state.assetTypes.push(val)}updateContextTags()})})}
 
-function initSegmented(){document.querySelectorAll('.segmented button').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.segmented button').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.creativeStage=btn.dataset.value;updateContextTags();if(!state.frameworkManual)autoSelectFramework()})})}
+function initSegmented(){document.querySelectorAll('.stage-segmented button').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.stage-segmented button').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.creativeStage=btn.dataset.value;if(!state.frameworkManual)autoSelectFramework();updateContextTags()})})}
 
-function initPills(){document.querySelectorAll('.audience-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{pill.classList.toggle('selected');const val=pill.dataset.value;if(state.audience.includes(val)){state.audience=state.audience.filter(a=>a!==val)}else{state.audience.push(val)}updateContextTags();if(!state.frameworkManual)autoSelectFramework()})});document.querySelectorAll('.goal-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'));pill.classList.add('selected');state.goal=pill.dataset.value;updateContextTags()})});document.querySelectorAll('.framework-segmented button').forEach(btn=>{btn.addEventListener('click',()=>{const wasSelected=btn.classList.contains('selected')&&!btn.classList.contains('auto-selected');document.querySelectorAll('.framework-segmented button').forEach(b=>{b.classList.remove('selected');b.classList.remove('auto-selected')});if(wasSelected&&btn.dataset.value===state.framework){state.framework=null;state.frameworkManual=false;autoSelectFramework()}else{btn.classList.add('selected');state.framework=btn.dataset.value;state.frameworkManual=true;updateFrameworkExplainer(btn.dataset.value)}updateContextTags()})})}
+function initPills(){document.querySelectorAll('.audience-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{pill.classList.toggle('selected');const val=pill.dataset.value;if(state.audience.includes(val)){state.audience=state.audience.filter(a=>a!==val)}else{state.audience.push(val)}if(!state.frameworkManual)autoSelectFramework();updateContextTags()})});document.querySelectorAll('.goal-pills .pill').forEach(pill=>{pill.addEventListener('click',()=>{document.querySelectorAll('.goal-pills .pill').forEach(p=>p.classList.remove('selected'));pill.classList.add('selected');state.goal=pill.dataset.value;updateContextTags()})});document.querySelectorAll('.framework-segmented button').forEach(btn=>{btn.addEventListener('click',()=>{const wasSelected=btn.classList.contains('selected')&&!btn.classList.contains('auto-selected');document.querySelectorAll('.framework-segmented button').forEach(b=>{b.classList.remove('selected');b.classList.remove('auto-selected')});if(wasSelected&&btn.dataset.value===state.framework){state.framework=null;state.frameworkManual=false;autoSelectFramework()}else{btn.classList.add('selected');state.framework=btn.dataset.value;state.frameworkManual=true;updateFrameworkExplainer(btn.dataset.value)}updateContextTags()})})}
 const FRAMEWORK_MAP={audience:{'Designer':'COIN','Copywriter':'COIN','Agency Partner':'COIN','Marketing Manager':'I Like / I Wish / What If','VP / Director':'Plus/Delta','Cross-Functional':'COIN'},stage:{'First Draft':'I Like / I Wish / What If','In Review':'COIN','Approval Ready':'Plus/Delta'}};
 const FRAMEWORK_EXPLAINERS={'COIN':'Context → Observation → Impact → Next steps. Best for actionable, direct feedback.','I Like / I Wish / What If':'Encouraging + exploratory. Great for early ideas and collaborative brainstorming.','Plus/Delta':'What\'s working + what to change. Fast, executive-friendly.'};
 
